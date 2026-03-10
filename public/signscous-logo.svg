@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" role="img" aria-label="Signscous logo">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#ff7a18" />
+      <stop offset="1" stop-color="#ff4d00" />
+    </linearGradient>
+  </defs>
+  <rect width="640" height="200" rx="24" fill="#050608" />
+  <path d="M80 140c90 55 290 55 400-5" stroke="url(#g)" stroke-width="16" fill="none" stroke-linecap="round" />
+  <path d="M110 70c95-50 285-50 390 0" stroke="url(#g)" stroke-width="16" fill="none" stroke-linecap="round" />
+  <text x="90" y="115" fill="#f4f4f5" font-family="Rajdhani, Arial, sans-serif" font-size="68" font-weight="700" letter-spacing="2">SIGNS</text>
+  <text x="340" y="115" fill="#ff6500" font-family="Rajdhani, Arial, sans-serif" font-size="68" font-weight="700" letter-spacing="2">COUS</text>
+  <text x="94" y="150" fill="#d4d4d8" font-family="Barlow, Arial, sans-serif" font-size="22" font-weight="600" letter-spacing="4">WHOLESALE LARGE FORMAT PRINTING</text>
+</svg>

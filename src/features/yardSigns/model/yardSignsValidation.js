@@ -1,0 +1,15 @@
+export function validateYardSignsInput(input) {
+  const errors = [];
+
+  if (!input.size) errors.push('Size is required.');
+  if (!input.material) errors.push('Material is required.');
+  if (!input.sides) errors.push('Print sides are required.');
+  if (!input.turnaround) errors.push('Turnaround is required.');
+
+  const qty = Number(input.quantity);
+  if (!Number.isInteger(qty) || qty < 1 || qty > 50000) {
+    errors.push('Quantity must be an integer between 1 and 50000.');
+  }
+
+  return errors;
+}

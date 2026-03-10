@@ -1,0 +1,456 @@
+openapi: 3.0.3
+info:
+  title: Signscous Yard Signs API
+  version: 1.0.0
+  description: End-to-end API contract for Yard Signs quote, artwork, cart, checkout, and order flow.
+servers:
+  - url: https://api.signscous.com
+paths:
+  /v1/products/yard-signs/config:
+    get:
+      summary: Get configurable options and constraints for Yard Signs
+      responses:
+        '200':
+          description: Product configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YardSignConfigResponse'
+
+  /v1/quotes/yard-signs:
+    post:
+      summary: Create or refresh a Yard Signs quote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/YardSignQuoteRequest'
+      responses:
+        '200':
+          description: Quote generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YardSignQuoteResponse'
+
+  /v1/artwork/uploads/presign:
+    post:
+      summary: Generate pre-signed upload URL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtworkPresignRequest'
+      responses:
+        '200':
+          description: Pre-signed URL payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtworkPresignResponse'
+
+  /v1/artwork/uploads/complete:
+    post:
+      summary: Confirm completed upload and trigger preflight
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtworkCompleteRequest'
+      responses:
+        '200':
+          description: Artwork file accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtworkCompleteResponse'
+
+  /v1/carts:
+    post:
+      summary: Create an active cart from a quote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [quoteId]
+              properties:
+                quoteId:
+                  type: string
+                  format: uuid
+      responses:
+        '201':
+          description: Cart created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+
+  /v1/carts/{cartId}/items:
+    post:
+      summary: Add quoted item to cart
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [quoteItemId, quantity]
+              properties:
+                quoteItemId:
+                  type: string
+                  format: uuid
+                quantity:
+                  type: integer
+      responses:
+        '200':
+          description: Cart updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+
+  /v1/checkout/price:
+    post:
+      summary: Calculate final checkout totals and shipping options
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [cartId, shippingPostalCode, shippingMethod]
+              properties:
+                cartId:
+                  type: string
+                  format: uuid
+                shippingPostalCode:
+                  type: string
+                shippingMethod:
+                  type: string
+                  enum: [ground, two_day, overnight]
+      responses:
+        '200':
+          description: Checkout totals
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutPriceResponse'
+
+  /v1/orders:
+    post:
+      summary: Place order from cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+      responses:
+        '201':
+          description: Order placed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateOrderResponse'
+
+  /v1/orders/{orderNumber}:
+    get:
+      summary: Get order summary
+      parameters:
+        - in: path
+          name: orderNumber
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderSummaryResponse'
+
+  /v1/orders/{orderNumber}/timeline:
+    get:
+      summary: Get order production and shipping timeline
+      parameters:
+        - in: path
+          name: orderNumber
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Timeline events
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderNumber:
+                    type: string
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        status:
+                          type: string
+                        message:
+                          type: string
+                        at:
+                          type: string
+                          format: date-time
+
+components:
+  schemas:
+    YardSignQuoteRequest:
+      type: object
+      required: [size, material, sides, quantity, turnaround]
+      properties:
+        size:
+          type: string
+          enum: [18x24, 24x18, 24x36]
+        material:
+          type: string
+          enum: [coroplast_4mm, coroplast_10mm]
+        sides:
+          type: string
+          enum: [single_sided, double_sided]
+        quantity:
+          type: integer
+          minimum: 1
+        turnaround:
+          type: string
+          enum: [standard_48h, rush_24h]
+        finishing:
+          type: string
+          enum: [none, h_stake_included, drill_holes]
+
+    YardSignQuoteResponse:
+      type: object
+      required: [quoteId, quoteNumber, skuCode, unitPrice, subtotal, total, productionDays]
+      properties:
+        quoteId:
+          type: string
+          format: uuid
+        quoteNumber:
+          type: string
+        skuCode:
+          type: string
+        unitPrice:
+          type: number
+          format: float
+        subtotal:
+          type: number
+          format: float
+        shippingEstimate:
+          type: number
+          format: float
+        total:
+          type: number
+          format: float
+        productionDays:
+          type: integer
+        expiresAt:
+          type: string
+          format: date-time
+
+    YardSignConfigResponse:
+      type: object
+      properties:
+        productSlug:
+          type: string
+        options:
+          type: array
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+              label:
+                type: string
+              values:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    code:
+                      type: string
+                    label:
+                      type: string
+
+    ArtworkPresignRequest:
+      type: object
+      required: [fileName, mimeType, fileSizeBytes]
+      properties:
+        fileName:
+          type: string
+        mimeType:
+          type: string
+        fileSizeBytes:
+          type: integer
+
+    ArtworkPresignResponse:
+      type: object
+      required: [artworkId, uploadUrl, uploadMethod, uploadHeaders, storageKey]
+      properties:
+        artworkId:
+          type: string
+          format: uuid
+        uploadUrl:
+          type: string
+        uploadMethod:
+          type: string
+        uploadHeaders:
+          type: object
+          additionalProperties:
+            type: string
+        storageKey:
+          type: string
+
+    ArtworkCompleteRequest:
+      type: object
+      required: [artworkId, quoteItemId]
+      properties:
+        artworkId:
+          type: string
+          format: uuid
+        quoteItemId:
+          type: string
+          format: uuid
+
+    ArtworkCompleteResponse:
+      type: object
+      properties:
+        artworkId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [uploaded, preflight_pending]
+
+    CartResponse:
+      type: object
+      properties:
+        cartId:
+          type: string
+          format: uuid
+        status:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              cartItemId:
+                type: string
+                format: uuid
+              quoteItemId:
+                type: string
+                format: uuid
+              quantity:
+                type: integer
+              unitPrice:
+                type: number
+                format: float
+              lineTotal:
+                type: number
+                format: float
+        subtotal:
+          type: number
+          format: float
+
+    CheckoutPriceResponse:
+      type: object
+      properties:
+        subtotal:
+          type: number
+          format: float
+        shipping:
+          type: number
+          format: float
+        tax:
+          type: number
+          format: float
+        total:
+          type: number
+          format: float
+
+    CreateOrderRequest:
+      type: object
+      required: [cartId, shippingAddressId, billingAddressId, shippingMethod, paymentMethodToken]
+      properties:
+        cartId:
+          type: string
+          format: uuid
+        shippingAddressId:
+          type: string
+          format: uuid
+        billingAddressId:
+          type: string
+          format: uuid
+        shippingMethod:
+          type: string
+          enum: [ground, two_day, overnight]
+        paymentMethodToken:
+          type: string
+
+    CreateOrderResponse:
+      type: object
+      properties:
+        orderId:
+          type: string
+          format: uuid
+        orderNumber:
+          type: string
+        status:
+          type: string
+        paymentStatus:
+          type: string
+
+    OrderSummaryResponse:
+      type: object
+      properties:
+        orderNumber:
+          type: string
+        status:
+          type: string
+        paymentStatus:
+          type: string
+        totals:
+          type: object
+          properties:
+            subtotal:
+              type: number
+            shipping:
+              type: number
+            tax:
+              type: number
+            total:
+              type: number
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              description:
+                type: string
+              quantity:
+                type: integer
+              unitPrice:
+                type: number
+              lineTotal:
+                type: number
