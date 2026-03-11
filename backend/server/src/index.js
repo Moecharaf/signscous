@@ -48,9 +48,27 @@ const createWindowGraphicsQuote = store.createWindowGraphicsQuote;
 const app = express();
 const port = Number(process.env.PORT || 8787);
 const jwtSecret = process.env.JWT_SECRET || 'change-this-secret';
-const allowedOrigin = process.env.ALLOWED_ORIGIN || 'http://localhost:5173';
+const allowedOrigins = (process.env.ALLOWED_ORIGIN || 'http://localhost:5173')
+  .split(',')
+  .map((value) => value.trim())
+  .filter(Boolean);
 
-app.use(cors({ origin: allowedOrigin }));
+app.use(cors({
+  origin(origin, callback) {
+    // Allow non-browser clients and same-origin requests with no Origin header.
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+      return;
+    }
+
+    callback(new Error(`CORS blocked for origin: ${origin}`));
+  },
+}));
 app.use(express.json());
 
 function signToken(user) {
