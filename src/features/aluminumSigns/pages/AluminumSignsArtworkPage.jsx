@@ -3,6 +3,12 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { addQuoteItemToCart, createCartFromQuote } from '../../cart/api/cartApi';
 import { createMockCartFromQuote, getMockQuote } from '../../../shared/mock/flowStore';
 
+const artworkExamples = [
+  '/products/aluminum-signs/aluminum-real-estate.svg',
+  '/products/aluminum-signs/aluminum-wayfinding.svg',
+  '/products/aluminum-signs/aluminum-parking.svg',
+];
+
 export default function AluminumSignsArtworkPage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,6 +47,20 @@ export default function AluminumSignsArtworkPage() {
           Quoted total: <span className="font-semibold text-white">${Number(quote.total || 0).toFixed(2)}</span>
         </div>
       ) : null}
+
+      <div className="mt-6 rounded-3xl border border-white/10 bg-zinc-950 p-6">
+        <div className="text-sm font-semibold text-zinc-200">Aluminum artwork examples</div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          {artworkExamples.map((src, index) => (
+            <img
+              key={src}
+              src={src}
+              alt={`Aluminum artwork example ${index + 1}`}
+              className="h-24 w-full rounded-xl border border-white/10 object-cover"
+            />
+          ))}
+        </div>
+      </div>
 
       <div className="mt-6 rounded-3xl border border-white/10 bg-zinc-950 p-6">
         <div className="text-sm text-zinc-400">Artwork status</div>

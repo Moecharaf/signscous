@@ -25,6 +25,7 @@ const {
   findUserByEmail,
   findUserById,
   getAllOrders,
+  getAllUsers,
   getCart,
   getCheckoutTotals,
   getOrder,
@@ -41,6 +42,8 @@ const {
 const createBannersQuote = store.createBannersQuote;
 const createAluminumSignsQuote = store.createAluminumSignsQuote;
 const createPvcSignsQuote = store.createPvcSignsQuote;
+const createAcrylicSignsQuote = store.createAcrylicSignsQuote;
+const createWindowGraphicsQuote = store.createWindowGraphicsQuote;
 
 const app = express();
 const port = Number(process.env.PORT || 8787);
@@ -87,11 +90,33 @@ app.get('/health', (_req, res) => {
 
 app.post('/v1/auth/signup', async (req, res) => {
   try {
-    const { name, email, password } = req.body || {};
-    if (!name || !email || !password) {
-      return res.status(400).json({ error: 'name, email, and password are required.' });
+    const {
+      name,
+      email,
+      password,
+      phone,
+      addressLine1,
+      addressLine2,
+      city,
+      state,
+      postalCode,
+      country,
+    } = req.body || {};
+    if (!name || !email || !password || !phone || !addressLine1 || !city || !state || !postalCode) {
+      return res.status(400).json({ error: 'name, email, password, phone, and full address are required.' });
     }
-    const user = await createUser({ name, email, password });
+    const user = await createUser({
+      name,
+      email,
+      password,
+      phone,
+      addressLine1,
+      addressLine2: addressLine2 || '',
+      city,
+      state,
+      postalCode,
+      country: country || 'US',
+    });
     const token = signToken(user);
     return res.status(201).json({ token, user: sanitizeUser(user) });
   } catch (err) {
@@ -177,6 +202,32 @@ app.post('/v1/quotes/pvc-signs', async (req, res) => {
   }
   try {
     const quote = await createPvcSignsQuote(req.body);
+    return res.json(quote);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+app.post('/v1/quotes/acrylic-signs', async (req, res) => {
+  const { size, thickness, printStyle, mounting, quantity, turnaround } = req.body || {};
+  if (!size || !thickness || !printStyle || !mounting || !quantity || !turnaround) {
+    return res.status(400).json({ error: 'Incomplete quote payload.' });
+  }
+  try {
+    const quote = await createAcrylicSignsQuote(req.body);
+    return res.json(quote);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+app.post('/v1/quotes/window-graphics', async (req, res) => {
+  const { size, material, installSurface, laminate, quantity, turnaround } = req.body || {};
+  if (!size || !material || !installSurface || !laminate || !quantity || !turnaround) {
+    return res.status(400).json({ error: 'Incomplete quote payload.' });
+  }
+  try {
+    const quote = await createWindowGraphicsQuote(req.body);
     return res.json(quote);
   } catch (err) {
     return res.status(400).json({ error: err.message });
@@ -282,6 +333,11 @@ app.get('/v1/account/orders', authRequired, async (req, res) => {
 app.get('/v1/admin/orders', authRequired, adminRequired, async (_req, res) => {
   const orders = await getAllOrders();
   return res.json({ orders });
+});
+
+app.get('/v1/admin/customers', authRequired, adminRequired, async (_req, res) => {
+  const customers = await getAllUsers();
+  return res.json({ customers });
 });
 
 app.patch('/v1/admin/orders/:orderNumber/status', authRequired, adminRequired, async (req, res) => {

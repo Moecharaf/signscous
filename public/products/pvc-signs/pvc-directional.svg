@@ -1,0 +1,10 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="600" fill="#1e293b" />
+  <rect x="100" y="90" width="1000" height="420" rx="22" fill="#0b1220" stroke="#22d3ee" stroke-width="6" />
+  <text x="150" y="190" fill="#22d3ee" font-family="Arial, sans-serif" font-size="58" font-weight="800">EVENT CHECK-IN</text>
+  <polygon points="760,140 910,140 910,90 1040,180 910,270 910,220 760,220" fill="#22d3ee" />
+  <text x="150" y="290" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="42">Booths A-F  •  Vendor Hall  •  Main Stage</text>
+  <text x="150" y="360" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="34">Weather-safe rigid PVC • Lightweight and durable</text>
+  <rect x="150" y="400" width="330" height="72" rx="12" fill="#f97316" />
+  <text x="198" y="447" fill="#ffffff" font-family="Arial, sans-serif" font-size="34" font-weight="700">FOLLOW ARROWS</text>
+</svg>

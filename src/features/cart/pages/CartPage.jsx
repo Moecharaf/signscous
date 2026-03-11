@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getCart } from '../api/cartApi';
 import { getMockCart } from '../../../shared/mock/flowStore';
+import { getProductBadgeMeta } from '../../../shared/ui/productBadge';
 
 export default function CartPage() {
   const { cartId } = useParams();
@@ -37,12 +38,18 @@ export default function CartPage() {
 
       {cart ? (
         <div className="mt-6 rounded-3xl border border-white/10 bg-zinc-950 p-6 text-zinc-300">
-          {cart.items?.map((item) => (
-            <div key={item.cartItemId || item.quoteItemId} className="flex items-center justify-between border-b border-white/10 pb-3 text-sm">
-              <span>{item.description || `Quote Item ${item.quoteItemId}`}</span>
-              <span className="font-semibold text-white">${Number(item.lineTotal || 0).toFixed(2)}</span>
-            </div>
-          ))}
+          {cart.items?.map((item) => {
+            const badge = getProductBadgeMeta(item.description);
+            return (
+              <div key={item.cartItemId || item.quoteItemId} className="flex items-center justify-between border-b border-white/10 pb-3 text-sm">
+                <div className="flex items-center gap-2">
+                  <span className={`rounded-full border px-2 py-0.5 text-xs font-semibold ${badge.className}`}>{badge.label}</span>
+                  <span>{item.description || `Quote Item ${item.quoteItemId}`}</span>
+                </div>
+                <span className="font-semibold text-white">${Number(item.lineTotal || 0).toFixed(2)}</span>
+              </div>
+            );
+          })}
           <div className="mt-4 flex items-center justify-between text-sm">
             <span>Subtotal</span>
             <span className="font-semibold text-white">${Number(cart.subtotal || 0).toFixed(2)}</span>

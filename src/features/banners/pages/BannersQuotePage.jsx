@@ -5,9 +5,16 @@ import { bannersDefaults } from '../model/bannersDefaults';
 import { validateBannersInput } from '../model/bannersValidation';
 import { createMockQuote } from '../../../shared/mock/flowStore';
 
+const bannerSamples = [
+  { id: 'retail', name: 'Retail Sale', src: '/products/banners/banner-retail-sale.svg' },
+  { id: 'construction', name: 'Construction Notice', src: '/products/banners/banner-construction.svg' },
+  { id: 'event', name: 'Event Promo', src: '/products/banners/banner-event.svg' },
+];
+
 export default function BannersQuotePage() {
   const navigate = useNavigate();
   const [input, setInput] = useState(bannersDefaults);
+  const [selectedSample, setSelectedSample] = useState(bannerSamples[0].id);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -38,6 +45,29 @@ export default function BannersQuotePage() {
       <p className="mt-3 text-zinc-400">Configure size, material, finishing, quantity, and turnaround for real-time vinyl banner pricing.</p>
 
       <div className="mt-8 rounded-3xl border border-white/10 bg-zinc-950 p-6">
+        <div className="mb-5 text-sm font-semibold text-zinc-200">Sample banner designs</div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {bannerSamples.map((sample) => (
+            <button
+              key={sample.id}
+              type="button"
+              onClick={() => setSelectedSample(sample.id)}
+              className={`overflow-hidden rounded-2xl border text-left transition ${selectedSample === sample.id ? 'border-orange-500' : 'border-white/10 hover:border-white/30'}`}
+            >
+              <img src={sample.src} alt={sample.name} className="h-28 w-full object-cover" />
+              <div className="bg-black/60 px-3 py-2 text-xs text-zinc-200">{sample.name}</div>
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-5 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
+          <img
+            src={bannerSamples.find((sample) => sample.id === selectedSample)?.src}
+            alt="Selected banner preview"
+            className="h-44 w-full object-cover"
+          />
+        </div>
+
         <div className="grid gap-3 text-sm text-zinc-300 sm:grid-cols-2">
 
           <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Size

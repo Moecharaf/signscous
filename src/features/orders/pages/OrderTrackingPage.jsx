@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getOrderSummary, getOrderTimeline } from '../api/ordersApi';
 import { getMockOrderSummary, getMockOrderTimeline } from '../../../shared/mock/flowStore';
+import { getProductBadgeMeta } from '../../../shared/ui/productBadge';
 
 export default function OrderTrackingPage() {
   const { orderNumber } = useParams();
@@ -47,6 +48,24 @@ export default function OrderTrackingPage() {
       {summary?.status ? (
         <div className="mt-4 rounded-2xl border border-white/10 bg-zinc-950 p-5 text-sm text-zinc-300">
           Current status: <span className="font-semibold text-white">{summary.status}</span>
+        </div>
+      ) : null}
+
+      {summary?.items?.length ? (
+        <div className="mt-4 rounded-2xl border border-white/10 bg-zinc-950 p-5 text-sm text-zinc-300">
+          <div className="mb-3 text-sm font-semibold text-zinc-200">Items in this order</div>
+          {summary.items.map((item, index) => {
+            const badge = getProductBadgeMeta(item.description);
+            return (
+              <div key={`${item.quoteItemId || 'item'}-${index}`} className="mb-2 flex items-center justify-between border-b border-white/10 pb-2 last:mb-0">
+                <div className="flex items-center gap-2">
+                  <span className={`rounded-full border px-2 py-0.5 text-xs font-semibold ${badge.className}`}>{badge.label}</span>
+                  <span>{item.description || 'Custom item'}</span>
+                </div>
+                <span className="font-semibold text-white">${Number(item.lineTotal || 0).toFixed(2)}</span>
+              </div>
+            );
+          })}
         </div>
       ) : null}
 

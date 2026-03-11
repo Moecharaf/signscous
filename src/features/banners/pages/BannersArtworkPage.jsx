@@ -3,6 +3,12 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { addQuoteItemToCart, createCartFromQuote } from '../../cart/api/cartApi';
 import { createMockCartFromQuote, getMockQuote } from '../../../shared/mock/flowStore';
 
+const artworkExamples = [
+  '/products/banners/banner-retail-sale.svg',
+  '/products/banners/banner-construction.svg',
+  '/products/banners/banner-event.svg',
+];
+
 export default function BannersArtworkPage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,6 +47,20 @@ export default function BannersArtworkPage() {
           Quoted total: <span className="font-semibold text-white">${Number(quote.total || 0).toFixed(2)}</span>
         </div>
       ) : null}
+
+      <div className="mt-6 rounded-3xl border border-white/10 bg-zinc-950 p-6">
+        <div className="text-sm font-semibold text-zinc-200">Banner artwork examples</div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          {artworkExamples.map((src, index) => (
+            <img
+              key={src}
+              src={src}
+              alt={`Banner artwork example ${index + 1}`}
+              className="h-24 w-full rounded-xl border border-white/10 object-cover"
+            />
+          ))}
+        </div>
+      </div>
 
       <div className="mt-6 rounded-3xl border border-white/10 bg-zinc-950 p-6">
         <div className="text-sm text-zinc-400">Artwork status</div>

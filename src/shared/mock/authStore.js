@@ -25,6 +25,13 @@ function seedAdminIfMissing() {
       id: `user-${Date.now()}`,
       name: 'Signscous Admin',
       email: 'admin@signscous.com',
+      phone: '',
+      addressLine1: '',
+      addressLine2: '',
+      city: '',
+      state: '',
+      postalCode: '',
+      country: 'US',
       password: 'admin123',
       role: 'admin',
       createdAt: new Date().toISOString(),
@@ -37,7 +44,18 @@ export function initAuthStore() {
   seedAdminIfMissing();
 }
 
-export function registerMockUser({ name, email, password }) {
+export function registerMockUser({
+  name,
+  email,
+  password,
+  phone,
+  addressLine1,
+  addressLine2,
+  city,
+  state,
+  postalCode,
+  country,
+}) {
   initAuthStore();
   const users = readJson(USERS_KEY, []);
   const existing = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
@@ -49,6 +67,13 @@ export function registerMockUser({ name, email, password }) {
     id: `user-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
     name,
     email,
+    phone,
+    addressLine1,
+    addressLine2: addressLine2 || '',
+    city,
+    state,
+    postalCode,
+    country: country || 'US',
     password,
     role: 'customer',
     createdAt: new Date().toISOString(),
@@ -67,6 +92,13 @@ function sanitizeUser(user) {
     id: user.id,
     name: user.name,
     email: user.email,
+    phone: user.phone || '',
+    addressLine1: user.addressLine1 || '',
+    addressLine2: user.addressLine2 || '',
+    city: user.city || '',
+    state: user.state || '',
+    postalCode: user.postalCode || '',
+    country: user.country || 'US',
     role: user.role,
   };
 }
@@ -95,4 +127,12 @@ export function getCurrentMockUser() {
 export function logoutMockUser() {
   if (typeof window === 'undefined') return;
   window.localStorage.removeItem(SESSION_KEY);
+}
+
+export function getAllMockUsers() {
+  initAuthStore();
+  const users = readJson(USERS_KEY, []);
+  return users
+    .map((u) => sanitizeUser(u))
+    .sort((a, b) => (a.role === 'admin' ? -1 : 1));
 }

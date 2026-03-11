@@ -38,6 +38,14 @@ export default function YardSignsQuotePage() {
       <h1 className="text-4xl font-black">Yard Signs Quote</h1>
       <p className="mt-3 text-zinc-400">Configure size, material, sides, quantity, and turnaround to generate a real-time quote.</p>
 
+      <div className="mt-8 overflow-hidden rounded-3xl border border-white/10 bg-zinc-950">
+        <img
+          src="/products/yard-signs/yard-sign-hero.png"
+          alt="Yard signs sample"
+          className="h-56 w-full object-cover"
+        />
+      </div>
+
       <div className="mt-8 rounded-3xl border border-white/10 bg-zinc-950 p-6">
         <div className="grid gap-3 text-sm text-zinc-300 sm:grid-cols-2">
           <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Size

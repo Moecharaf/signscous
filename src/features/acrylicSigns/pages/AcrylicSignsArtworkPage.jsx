@@ -4,12 +4,11 @@ import { addQuoteItemToCart, createCartFromQuote } from '../../cart/api/cartApi'
 import { createMockCartFromQuote, getMockQuote } from '../../../shared/mock/flowStore';
 
 const artworkExamples = [
-  '/products/pvc-signs/pvc-retail.svg',
-  '/products/pvc-signs/pvc-menu-board.svg',
-  '/products/pvc-signs/pvc-directional.svg',
+  '/products/acrylic-signs/acrylic-office.svg',
+  '/products/acrylic-signs/acrylic-wayfinding.svg',
 ];
 
-export default function PvcSignsArtworkPage() {
+export default function AcrylicSignsArtworkPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { quoteId } = useParams();
@@ -35,7 +34,7 @@ export default function PvcSignsArtworkPage() {
 
   return (
     <section className="mx-auto max-w-4xl px-6 py-16 text-zinc-100">
-      <h1 className="text-4xl font-black">Upload Artwork — PVC Signs</h1>
+      <h1 className="text-4xl font-black">Upload Artwork — Acrylic Signs</h1>
       <p className="mt-3 text-zinc-400">Upload print-ready files and track preflight status before adding to cart.</p>
 
       <div className="mt-6 rounded-2xl border border-white/10 bg-zinc-950 p-5 text-sm text-zinc-300">
@@ -49,13 +48,13 @@ export default function PvcSignsArtworkPage() {
       ) : null}
 
       <div className="mt-6 rounded-3xl border border-white/10 bg-zinc-950 p-6">
-        <div className="text-sm font-semibold text-zinc-200">PVC artwork examples</div>
-        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <div className="text-sm font-semibold text-zinc-200">Acrylic artwork examples</div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {artworkExamples.map((src, index) => (
             <img
               key={src}
               src={src}
-              alt={`PVC artwork example ${index + 1}`}
+              alt={`Acrylic artwork example ${index + 1}`}
               className="h-24 w-full rounded-xl border border-white/10 object-cover"
             />
           ))}
@@ -71,7 +70,7 @@ export default function PvcSignsArtworkPage() {
         <button onClick={handleAddToCart} disabled={isLoading} className="rounded-xl bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-400 disabled:opacity-60">
           {isLoading ? 'Adding to Cart...' : 'Add to Cart'}
         </button>
-        <Link to="/pvc-signs" className="rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-zinc-200 hover:bg-white/5">
+        <Link to="/acrylic-signs" className="rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-zinc-200 hover:bg-white/5">
           Back to Quote
         </Link>
       </div>

@@ -1,20 +1,19 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { createAluminumSignsQuote } from '../api/aluminumSignsApi';
-import { aluminumSignsDefaults } from '../model/aluminumSignsDefaults';
-import { validateAluminumSignsInput } from '../model/aluminumSignsValidation';
+import { createAcrylicSignsQuote } from '../api/acrylicSignsApi';
+import { acrylicSignsDefaults } from '../model/acrylicSignsDefaults';
+import { validateAcrylicSignsInput } from '../model/acrylicSignsValidation';
 import { createMockQuote } from '../../../shared/mock/flowStore';
 
-const aluminumSamples = [
-  { id: 'real-estate', name: 'Real Estate', src: '/products/aluminum-signs/aluminum-real-estate.svg' },
-  { id: 'wayfinding', name: 'Wayfinding', src: '/products/aluminum-signs/aluminum-wayfinding.svg' },
-  { id: 'parking', name: 'Parking', src: '/products/aluminum-signs/aluminum-parking.svg' },
+const acrylicSamples = [
+  { id: 'office', name: 'Office Lobby', src: '/products/acrylic-signs/acrylic-office.svg' },
+  { id: 'wayfinding', name: 'Wayfinding', src: '/products/acrylic-signs/acrylic-wayfinding.svg' },
 ];
 
-export default function AluminumSignsQuotePage() {
+export default function AcrylicSignsQuotePage() {
   const navigate = useNavigate();
-  const [input, setInput] = useState(aluminumSignsDefaults);
-  const [selectedSample, setSelectedSample] = useState(aluminumSamples[0].id);
+  const [input, setInput] = useState(acrylicSignsDefaults);
+  const [selectedSample, setSelectedSample] = useState(acrylicSamples[0].id);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,17 +22,17 @@ export default function AluminumSignsQuotePage() {
   }
 
   async function handleContinue() {
-    const errors = validateAluminumSignsInput(input);
+    const errors = validateAcrylicSignsInput(input);
     if (errors.length > 0) { setError(errors[0]); return; }
 
     setError('');
     setIsLoading(true);
     try {
-      const response = await createAluminumSignsQuote(input);
-      navigate(`/aluminum-signs/artwork/${response.quoteId}`, { state: response });
+      const response = await createAcrylicSignsQuote(input);
+      navigate(`/acrylic-signs/artwork/${response.quoteId}`, { state: response });
     } catch {
       const fallback = createMockQuote(input);
-      navigate(`/aluminum-signs/artwork/${fallback.quoteId}`, { state: fallback });
+      navigate(`/acrylic-signs/artwork/${fallback.quoteId}`, { state: fallback });
     } finally {
       setIsLoading(false);
     }
@@ -41,13 +40,13 @@ export default function AluminumSignsQuotePage() {
 
   return (
     <section className="mx-auto max-w-4xl px-6 py-16 text-zinc-100">
-      <h1 className="text-4xl font-black">Aluminum Signs Quote</h1>
-      <p className="mt-3 text-zinc-400">Durable metal signage — configure size, thickness, finishing, and quantity.</p>
+      <h1 className="text-4xl font-black">Acrylic Signs Quote</h1>
+      <p className="mt-3 text-zinc-400">Premium acrylic signage for offices and retail interiors.</p>
 
       <div className="mt-8 rounded-3xl border border-white/10 bg-zinc-950 p-6">
-        <div className="mb-5 text-sm font-semibold text-zinc-200">Sample aluminum sign designs</div>
-        <div className="grid gap-3 sm:grid-cols-3">
-          {aluminumSamples.map((sample) => (
+        <div className="mb-5 text-sm font-semibold text-zinc-200">Sample acrylic designs</div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {acrylicSamples.map((sample) => (
             <button
               key={sample.id}
               type="button"
@@ -62,40 +61,40 @@ export default function AluminumSignsQuotePage() {
 
         <div className="mt-5 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
           <img
-            src={aluminumSamples.find((sample) => sample.id === selectedSample)?.src}
-            alt="Selected aluminum sign preview"
+            src={acrylicSamples.find((sample) => sample.id === selectedSample)?.src}
+            alt="Selected acrylic sign preview"
             className="h-44 w-full object-cover"
           />
         </div>
 
-        <div className="grid gap-3 text-sm text-zinc-300 sm:grid-cols-2">
-
+        <div className="mt-5 grid gap-3 text-sm text-zinc-300 sm:grid-cols-2">
           <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Size
             <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.size} onChange={set('size')}>
-              <option value="12x18">12 × 18 in</option>
-              <option value="18x24">18 × 24 in</option>
-              <option value="24x36">24 × 36 in</option>
+              <option value="12x18">12 x 18 in</option>
+              <option value="18x24">18 x 24 in</option>
+              <option value="24x36">24 x 36 in</option>
             </select>
           </label>
 
           <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Thickness
             <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.thickness} onChange={set('thickness')}>
-              <option value="040">.040 Standard</option>
-              <option value="063">.063 Heavy Duty</option>
+              <option value="3mm">3mm</option>
+              <option value="6mm">6mm</option>
             </select>
           </label>
 
-          <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Print Sides
-            <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.sides} onChange={set('sides')}>
-              <option value="single_sided">Single-sided</option>
-              <option value="double_sided">Double-sided</option>
+          <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Print Style
+            <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.printStyle} onChange={set('printStyle')}>
+              <option value="surface_print">Surface Print</option>
+              <option value="subsurface_print">Sub-surface Print</option>
             </select>
           </label>
 
-          <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Finishing
-            <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.finishing} onChange={set('finishing')}>
-              <option value="none">No Finishing</option>
-              <option value="holes_drilled">Pre-drilled Holes</option>
+          <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Mounting
+            <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.mounting} onChange={set('mounting')}>
+              <option value="standoffs">Standoffs</option>
+              <option value="adhesive">Adhesive</option>
+              <option value="none">No Mounting</option>
             </select>
           </label>
 
@@ -109,7 +108,6 @@ export default function AluminumSignsQuotePage() {
               <option value="rush_24h">Rush 24h</option>
             </select>
           </label>
-
         </div>
       </div>
 

@@ -5,10 +5,25 @@ CREATE TABLE IF NOT EXISTS users (
   id          TEXT        PRIMARY KEY,
   name        TEXT        NOT NULL,
   email       TEXT        NOT NULL UNIQUE,
+  phone       TEXT,
+  address_line1 TEXT,
+  address_line2 TEXT,
+  city        TEXT,
+  state       TEXT,
+  postal_code TEXT,
+  country     TEXT,
   password_hash TEXT      NOT NULL,
   role        TEXT        NOT NULL DEFAULT 'customer',
   created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+ALTER TABLE users ADD COLUMN IF NOT EXISTS phone TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS address_line1 TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS address_line2 TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS city TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS state TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS postal_code TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS country TEXT;
 
 CREATE TABLE IF NOT EXISTS quotes (
   id              TEXT        PRIMARY KEY,

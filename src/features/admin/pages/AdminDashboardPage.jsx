@@ -1,25 +1,33 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../../shared/auth/AuthContext';
-import { getAdminOrders, updateAdminOrderStatus } from '../api/adminApi';
+import { getAdminCustomers, getAdminOrders, updateAdminOrderStatus } from '../api/adminApi';
 import { getAllMockOrders, updateMockOrderStatus } from '../../../shared/mock/flowStore';
+import { getAllMockUsers } from '../../../shared/mock/authStore';
+import { getOrderBadgeDetails } from '../../../shared/ui/productBadge';
 
 export default function AdminDashboardPage() {
   const { user, logout } = useAuth();
   const [orders, setOrders] = useState([]);
+  const [customers, setCustomers] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
 
     async function loadOrders() {
       try {
-        const live = await getAdminOrders();
+        const [liveOrders, liveCustomers] = await Promise.all([
+          getAdminOrders(),
+          getAdminCustomers(),
+        ]);
         if (isMounted) {
-          setOrders(live.orders || []);
+          setOrders(liveOrders.orders || []);
+          setCustomers(liveCustomers.customers || []);
         }
       } catch {
         if (isMounted) {
           setOrders(getAllMockOrders());
+          setCustomers(getAllMockUsers());
         }
       }
     }
@@ -57,6 +65,39 @@ export default function AdminDashboardPage() {
 
       <div className="mt-8 rounded-3xl border border-white/10 bg-zinc-950 p-6">
         <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-xl font-bold">Customers</h2>
+          <span className="text-sm text-zinc-400">{customers.length} total</span>
+        </div>
+
+        {customers.length === 0 ? (
+          <div className="rounded-xl border border-white/10 bg-black/40 p-4 text-sm text-zinc-400">
+            No customers found yet.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {customers.map((customer) => (
+              <div key={customer.id} className="rounded-xl border border-white/10 bg-black/40 p-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <div className="font-semibold">{customer.name || 'Unnamed Customer'}</div>
+                    <div className="text-sm text-zinc-400">{customer.email}</div>
+                    <div className="mt-1 text-sm text-zinc-400">Phone: {customer.phone || 'Not provided'}</div>
+                    <div className="mt-1 text-xs text-zinc-500">
+                      Address: {[customer.addressLine1, customer.addressLine2, customer.city, customer.state, customer.postalCode, customer.country]
+                        .filter(Boolean)
+                        .join(', ') || 'Not provided'}
+                    </div>
+                  </div>
+                  <span className="rounded-full border border-white/15 px-2 py-0.5 text-xs text-zinc-300">{customer.role}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="mt-8 rounded-3xl border border-white/10 bg-zinc-950 p-6">
+        <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-bold">Orders</h2>
           <span className="text-sm text-zinc-400">{orders.length} total</span>
         </div>
@@ -71,7 +112,20 @@ export default function AdminDashboardPage() {
               <div key={order.orderNumber} className="rounded-xl border border-white/10 bg-black/40 p-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <div className="font-semibold">{order.orderNumber}</div>
+                    <div className="flex items-center gap-2">
+                      <div className="font-semibold">{order.orderNumber}</div>
+                      {(() => {
+                        const badge = getOrderBadgeDetails(order.items || []);
+                        return (
+                          <span
+                            className={`rounded-full border px-2 py-0.5 text-xs font-semibold ${badge.className}`}
+                            title={badge.typeLabels.join(', ')}
+                          >
+                            {badge.label}
+                          </span>
+                        );
+                      })()}
+                    </div>
                     <div className="text-sm text-zinc-400">Status: {order.status}</div>
                   </div>
                   <div className="text-right">

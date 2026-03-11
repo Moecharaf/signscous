@@ -20,9 +20,42 @@ function makeQuoteNumber() {
   return `Q-${Math.floor(100000 + Math.random() * 900000)}`;
 }
 
+function buildItemDescription(quote) {
+  const sku = quote.skuCode || '';
+  const prefix = sku.split('-')[0];
+  const productNameMap = {
+    YS: 'Yard Signs',
+    BN: 'Banners',
+    AL: 'Aluminum Signs',
+    PVC: 'PVC Signs',
+    ACR: 'Acrylic Signs',
+    WIN: 'Window Graphics',
+  };
+  const productName = productNameMap[prefix] || 'Custom Signs';
+  const parts = [];
+
+  if (quote.input?.size) parts.push(quote.input.size);
+  if (quote.input?.sides) parts.push(quote.input.sides.replace('_', '-'));
+  if (quote.input?.material) parts.push(quote.input.material.replace('_', ' '));
+  if (quote.input?.thickness) parts.push(quote.input.thickness);
+
+  return `${productName}${parts.length ? ` ${parts.join(', ')}` : ''}`;
+}
+
 // ── Users ─────────────────────────────────────────────────────────────────────
 
-export async function createUser({ name, email, password }) {
+export async function createUser({
+  name,
+  email,
+  password,
+  phone,
+  addressLine1,
+  addressLine2,
+  city,
+  state,
+  postalCode,
+  country,
+}) {
   const existing = await pool.query(
     'SELECT id FROM users WHERE lower(email) = lower($1)',
     [email]
@@ -34,10 +67,26 @@ export async function createUser({ name, email, password }) {
   const hash = await bcrypt.hash(password, 12);
   const id = makeId('user');
   const { rows } = await pool.query(
-    `INSERT INTO users (id, name, email, password_hash, role)
-     VALUES ($1, $2, $3, $4, 'customer')
-     RETURNING id, name, email, role, created_at`,
-    [id, name, email, hash]
+    `INSERT INTO users (
+       id, name, email, phone,
+       address_line1, address_line2, city, state, postal_code, country,
+       password_hash, role
+     )
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'customer')
+     RETURNING *`,
+    [
+      id,
+      name,
+      email,
+      phone,
+      addressLine1,
+      addressLine2 || '',
+      city,
+      state,
+      postalCode,
+      country || 'US',
+      hash,
+    ]
   );
   return rows[0];
 }
@@ -60,7 +109,30 @@ export async function verifyPassword(user, plainPassword) {
 }
 
 export function sanitizeUser(user) {
-  return { id: user.id, name: user.name, email: user.email, role: user.role };
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    phone: user.phone || '',
+    addressLine1: user.address_line1 || user.addressLine1 || '',
+    addressLine2: user.address_line2 || user.addressLine2 || '',
+    city: user.city || '',
+    state: user.state || '',
+    postalCode: user.postal_code || user.postalCode || '',
+    country: user.country || 'US',
+    role: user.role,
+  };
+}
+
+export async function getAllUsers() {
+  const { rows } = await pool.query(
+    `SELECT id, name, email, phone,
+            address_line1, address_line2, city, state, postal_code, country,
+            role
+     FROM users
+     ORDER BY created_at DESC`
+  );
+  return rows.map((user) => sanitizeUser(user));
 }
 
 // ── Product config (static — no DB round-trip needed) ─────────────────────────
@@ -209,6 +281,30 @@ export async function createPvcSignsQuote(input) {
   });
 }
 
+export async function createAcrylicSignsQuote(input) {
+  const sizeMultipliers = { '12x18': 1.0, '18x24': 1.6, '24x36': 2.8 };
+  const basePrice = 8.00 * (sizeMultipliers[input.size] || 1.0);
+  const unitPrice = Number((basePrice + (input.thickness === '6mm' ? 2.00 : 0)).toFixed(2));
+  return insertQuote({
+    input,
+    unitPrice,
+    skuCode: `ACR-${input.size}-${input.thickness}-${input.printStyle}`,
+    productionDays: input.turnaround === 'rush_24h' ? 1 : 2,
+  });
+}
+
+export async function createWindowGraphicsQuote(input) {
+  const sizeMultipliers = { '24x36': 1.0, '36x48': 1.8, '48x60': 2.8 };
+  const basePrice = 5.50 * (sizeMultipliers[input.size] || 1.0);
+  const unitPrice = Number((basePrice + (input.material === 'perforated_vinyl' ? 1.00 : 0)).toFixed(2));
+  return insertQuote({
+    input,
+    unitPrice,
+    skuCode: `WIN-${input.size}-${input.material}-${input.installSurface}`,
+    productionDays: input.turnaround === 'rush_24h' ? 1 : 2,
+  });
+}
+
 export async function getQuote(quoteId) {
   const { rows } = await pool.query('SELECT * FROM quotes WHERE id = $1', [quoteId]);
   if (!rows[0]) return null;
@@ -255,7 +351,7 @@ export async function addCartItem(cartId, quoteItemId, quantity) {
 
   const itemQuantity = Number(quantity || quote.input.quantity || 1);
   const lineTotal = Number((quote.unitPrice * itemQuantity).toFixed(2));
-  const description = `Yard Signs ${quote.input.size}, ${quote.input.sides.replace('_', '-')}`;
+  const description = buildItemDescription(quote);
   const cartItemId = makeId('ci');
 
   // Replace any existing cart item for this quote item.

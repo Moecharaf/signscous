@@ -1,0 +1,13 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="600" fill="#111827" />
+  <rect x="80" y="60" width="1040" height="480" rx="24" fill="#f8fafc" />
+  <text x="120" y="140" fill="#0f172a" font-family="Arial, sans-serif" font-size="56" font-weight="800">CAFÉ MENU</text>
+  <line x1="120" y1="165" x2="1060" y2="165" stroke="#e2e8f0" stroke-width="4" />
+  <text x="120" y="230" fill="#1f2937" font-family="Arial, sans-serif" font-size="36">Signature Latte</text>
+  <text x="980" y="230" fill="#1f2937" font-family="Arial, sans-serif" font-size="36">$5.50</text>
+  <text x="120" y="290" fill="#1f2937" font-family="Arial, sans-serif" font-size="36">Cold Brew</text>
+  <text x="980" y="290" fill="#1f2937" font-family="Arial, sans-serif" font-size="36">$4.25</text>
+  <text x="120" y="350" fill="#1f2937" font-family="Arial, sans-serif" font-size="36">Turkey Panini</text>
+  <text x="980" y="350" fill="#1f2937" font-family="Arial, sans-serif" font-size="36">$8.95</text>
+  <text x="120" y="420" fill="#f97316" font-family="Arial, sans-serif" font-size="42" font-weight="700">INDOOR / OUTDOOR PVC BOARD</text>
+</svg>

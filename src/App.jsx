@@ -5,12 +5,12 @@ export default function App() {
   const { user, isAdmin, logout } = useAuth();
 
   const products = [
-    { name: 'Yard Signs', desc: 'Corrugated plastic signs for campaigns, retail, and real estate.', href: '/yard-signs' },
-    { name: 'Banners', desc: 'Indoor and outdoor banner printing with finishing options.', href: '/banners' },
-    { name: 'Aluminum Signs', desc: 'Durable metal signage for long-term exterior applications.', href: '/aluminum-signs' },
-    { name: 'PVC Signs', desc: 'Rigid lightweight boards for clean, professional branding.', href: '/pvc-signs' },
-    { name: 'Acrylic Signs', desc: 'Premium clear and printed acrylic for modern presentation.', href: '/yard-signs' },
-    { name: 'Window Graphics', desc: 'Perforated and adhesive vinyl solutions for storefronts.', href: '/yard-signs' },
+    { name: 'Yard Signs', desc: 'Corrugated plastic signs for campaigns, retail, and real estate.', href: '/yard-signs', image: '/products/yard-signs/yard-sign-hero.png' },
+    { name: 'Banners', desc: 'Indoor and outdoor banner printing with finishing options.', href: '/banners', image: '/products/banners/banner-retail-sale.svg' },
+    { name: 'Aluminum Signs', desc: 'Durable metal signage for long-term exterior applications.', href: '/aluminum-signs', image: '/products/aluminum-signs/aluminum-real-estate.svg' },
+    { name: 'PVC Signs', desc: 'Rigid lightweight boards for clean, professional branding.', href: '/pvc-signs', image: '/products/pvc-signs/pvc-retail.svg' },
+    { name: 'Acrylic Signs', desc: 'Premium clear and printed acrylic for modern presentation.', href: '/acrylic-signs', image: '/products/acrylic-signs/acrylic-office.svg' },
+    { name: 'Window Graphics', desc: 'Perforated and adhesive vinyl solutions for storefronts.', href: '/window-graphics', image: '/products/window-graphics/window-storefront.svg' },
   ];
 
   const steps = [
@@ -142,8 +142,12 @@ export default function App() {
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {products.map((product, idx) => (
               <Link key={product.name} to={product.href} className="group rounded-3xl border border-white/10 bg-zinc-950 p-6 transition hover:-translate-y-1 hover:border-orange-500/30 hover:bg-zinc-900">
-                <div className="mb-6 flex h-40 items-center justify-center rounded-2xl bg-gradient-to-br from-zinc-800 to-zinc-950 ring-1 ring-white/10">
-                  <div className="h-24 w-36 rounded-2xl border border-white/10 bg-white/5 shadow-xl" style={{ transform: `rotate(${idx % 2 === 0 ? -6 : 6}deg)` }} />
+                <div className="mb-6 flex h-40 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-800 to-zinc-950 ring-1 ring-white/10">
+                  {product.image ? (
+                    <img src={product.image} alt={`${product.name} sample`} className="h-full w-full object-cover" />
+                  ) : (
+                    <div className="h-24 w-36 rounded-2xl border border-white/10 bg-white/5 shadow-xl" style={{ transform: `rotate(${idx % 2 === 0 ? -6 : 6}deg)` }} />
+                  )}
                 </div>
                 <div className="text-2xl font-bold">{product.name}</div>
                 <p className="mt-3 leading-7 text-zinc-400">{product.desc}</p>

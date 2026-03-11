@@ -1,0 +1,12 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="600" fill="#111827" />
+  <rect x="90" y="90" width="1020" height="420" rx="22" fill="#ffffff" fill-opacity="0.18" stroke="#93c5fd" stroke-width="4" />
+  <text x="150" y="210" fill="#bfdbfe" font-family="Arial" font-size="52" font-weight="700">LEVEL 3 DIRECTORY</text>
+  <line x1="150" y1="236" x2="1040" y2="236" stroke="#cbd5e1" stroke-opacity="0.4" stroke-width="3" />
+  <text x="150" y="308" fill="#e5e7eb" font-family="Arial" font-size="36">Conference Rooms</text>
+  <text x="890" y="308" fill="#f97316" font-family="Arial" font-size="36" font-weight="700">301 - 314</text>
+  <text x="150" y="368" fill="#e5e7eb" font-family="Arial" font-size="36">Design Department</text>
+  <text x="890" y="368" fill="#f97316" font-family="Arial" font-size="36" font-weight="700">315 - 326</text>
+  <text x="150" y="430" fill="#e5e7eb" font-family="Arial" font-size="36">Executive Offices</text>
+  <text x="890" y="430" fill="#f97316" font-family="Arial" font-size="36" font-weight="700">327 - 336</text>
+</svg>

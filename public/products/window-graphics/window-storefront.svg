@@ -1,0 +1,10 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="600" fill="#0b1220" />
+  <rect x="80" y="70" width="1040" height="460" fill="#1f2937" />
+  <rect x="110" y="100" width="980" height="400" fill="#0f172a" stroke="#334155" stroke-width="6" />
+  <text x="190" y="220" fill="#f97316" font-family="Arial" font-size="72" font-weight="800">SUMMER SALE</text>
+  <text x="190" y="310" fill="#ffffff" font-family="Arial" font-size="108" font-weight="800">40% OFF</text>
+  <text x="190" y="370" fill="#cbd5e1" font-family="Arial" font-size="34">Window perf and adhesive vinyl graphics</text>
+  <rect x="190" y="400" width="310" height="70" rx="10" fill="#f97316" />
+  <text x="260" y="446" fill="#fff" font-family="Arial" font-size="32" font-weight="700">ENTER NOW</text>
+</svg>

@@ -1,0 +1,16 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1220" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#bg)" />
+  <circle cx="1020" cy="120" r="180" fill="#f97316" fill-opacity="0.18" />
+  <rect x="70" y="80" width="1060" height="440" rx="28" fill="#101826" stroke="#ffffff" stroke-opacity="0.08" />
+  <text x="110" y="210" fill="#f97316" font-family="Arial, sans-serif" font-weight="700" font-size="58" letter-spacing="2">WEEKEND DEAL</text>
+  <text x="110" y="300" fill="#ffffff" font-family="Arial, sans-serif" font-weight="800" font-size="96">50% OFF</text>
+  <text x="110" y="362" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="34">All in-store inventory while supplies last</text>
+  <rect x="110" y="406" width="320" height="72" rx="12" fill="#f97316" />
+  <text x="155" y="452" fill="#ffffff" font-family="Arial, sans-serif" font-weight="700" font-size="34">SHOP NOW</text>
+</svg>

@@ -1,0 +1,10 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="600" fill="#f8fafc" />
+  <rect x="120" y="100" width="960" height="400" rx="18" fill="#111827" />
+  <text x="170" y="200" fill="#22c55e" font-family="Arial, sans-serif" font-size="72" font-weight="800">ENTRANCE</text>
+  <polygon points="920,145 1010,145 1010,105 1080,180 1010,255 1010,215 920,215" fill="#22c55e" />
+  <line x1="170" y1="260" x2="1030" y2="260" stroke="#ffffff" stroke-opacity="0.3" stroke-width="3" />
+  <text x="170" y="332" fill="#e5e7eb" font-family="Arial, sans-serif" font-size="44" font-weight="700">RECEIVING DOCK</text>
+  <text x="170" y="392" fill="#9ca3af" font-family="Arial, sans-serif" font-size="30">Authorized Personnel Only</text>
+  <text x="170" y="450" fill="#f97316" font-family="Arial, sans-serif" font-size="34" font-weight="700">OSHA COMPLIANT SIGNAGE</text>
+</svg>

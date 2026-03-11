@@ -4,6 +4,13 @@ const store = {
       id: 'admin-1',
       name: 'Signscous Admin',
       email: 'admin@signscous.com',
+      phone: '',
+      addressLine1: '',
+      addressLine2: '',
+      city: '',
+      state: '',
+      postalCode: '',
+      country: 'US',
       password: 'admin123',
       role: 'admin',
       createdAt: new Date().toISOString(),
@@ -27,7 +34,40 @@ function makeQuoteNumber() {
   return `Q-${Math.floor(100000 + Math.random() * 900000)}`;
 }
 
-export function createUser({ name, email, password }) {
+function buildItemDescription(quote) {
+  const sku = quote.skuCode || '';
+  const prefix = sku.split('-')[0];
+  const productNameMap = {
+    YS: 'Yard Signs',
+    BN: 'Banners',
+    AL: 'Aluminum Signs',
+    PVC: 'PVC Signs',
+    ACR: 'Acrylic Signs',
+    WIN: 'Window Graphics',
+  };
+  const productName = productNameMap[prefix] || 'Custom Signs';
+  const parts = [];
+
+  if (quote.input?.size) parts.push(quote.input.size);
+  if (quote.input?.sides) parts.push(quote.input.sides.replace('_', '-'));
+  if (quote.input?.material) parts.push(quote.input.material.replace('_', ' '));
+  if (quote.input?.thickness) parts.push(quote.input.thickness);
+
+  return `${productName}${parts.length ? ` ${parts.join(', ')}` : ''}`;
+}
+
+export function createUser({
+  name,
+  email,
+  password,
+  phone,
+  addressLine1,
+  addressLine2,
+  city,
+  state,
+  postalCode,
+  country,
+}) {
   const existing = store.users.find((u) => u.email.toLowerCase() === email.toLowerCase());
   if (existing) {
     throw new Error('Email is already registered.');
@@ -37,6 +77,13 @@ export function createUser({ name, email, password }) {
     id: makeId('user'),
     name,
     email,
+    phone,
+    addressLine1,
+    addressLine2: addressLine2 || '',
+    city,
+    state,
+    postalCode,
+    country: country || 'US',
     password,
     role: 'customer',
     createdAt: new Date().toISOString(),
@@ -59,8 +106,22 @@ export function sanitizeUser(user) {
     id: user.id,
     name: user.name,
     email: user.email,
+    phone: user.phone || '',
+    addressLine1: user.addressLine1 || '',
+    addressLine2: user.addressLine2 || '',
+    city: user.city || '',
+    state: user.state || '',
+    postalCode: user.postalCode || '',
+    country: user.country || 'US',
     role: user.role,
   };
+}
+
+export function getAllUsers() {
+  return store.users
+    .slice()
+    .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+    .map((user) => sanitizeUser(user));
 }
 
 export function getYardSignsConfig() {
@@ -139,6 +200,20 @@ export function createPvcSignsQuote(input) {
   return buildQuote({ input, unitPrice, skuCode: `PVC-${input.size}-${input.thickness}-${input.sides}`, productionDays: input.turnaround === 'rush_24h' ? 1 : 2 });
 }
 
+export function createAcrylicSignsQuote(input) {
+  const sizeMultipliers = { '12x18': 1.0, '18x24': 1.6, '24x36': 2.8 };
+  const basePrice = 8.00 * (sizeMultipliers[input.size] || 1.0);
+  const unitPrice = Number((basePrice + (input.thickness === '6mm' ? 2.00 : 0)).toFixed(2));
+  return buildQuote({ input, unitPrice, skuCode: `ACR-${input.size}-${input.thickness}-${input.printStyle}`, productionDays: input.turnaround === 'rush_24h' ? 1 : 2 });
+}
+
+export function createWindowGraphicsQuote(input) {
+  const sizeMultipliers = { '24x36': 1.0, '36x48': 1.8, '48x60': 2.8 };
+  const basePrice = 5.50 * (sizeMultipliers[input.size] || 1.0);
+  const unitPrice = Number((basePrice + (input.material === 'perforated_vinyl' ? 1.00 : 0)).toFixed(2));
+  return buildQuote({ input, unitPrice, skuCode: `WIN-${input.size}-${input.material}-${input.installSurface}`, productionDays: input.turnaround === 'rush_24h' ? 1 : 2 });
+}
+
 export function getQuote(quoteId) {
   return store.quotes[quoteId] || null;
 }
@@ -175,7 +250,7 @@ export function addCartItem(cartId, quoteItemId, quantity) {
     cartItemId: makeId('ci'),
     quoteItemId,
     quantity: itemQuantity,
-    description: `Yard Signs ${quote.input.size}, ${quote.input.sides.replace('_', '-')}`,
+    description: buildItemDescription(quote),
     unitPrice: quote.unitPrice,
     lineTotal,
   };

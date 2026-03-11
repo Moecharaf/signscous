@@ -1,0 +1,10 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="600" fill="#0f172a" />
+  <rect x="80" y="80" width="1040" height="440" rx="20" fill="#ffffff" />
+  <rect x="80" y="80" width="1040" height="120" rx="20" fill="#1e3a8a" />
+  <text x="120" y="158" fill="#ffffff" font-family="Arial, sans-serif" font-size="56" font-weight="700">FOR SALE</text>
+  <text x="120" y="250" fill="#0f172a" font-family="Arial, sans-serif" font-size="44" font-weight="700">4 BED • 3 BATH • 2,900 SQFT</text>
+  <text x="120" y="318" fill="#334155" font-family="Arial, sans-serif" font-size="34">123 Cedar Grove Lane</text>
+  <text x="120" y="398" fill="#1e3a8a" font-family="Arial, sans-serif" font-size="62" font-weight="800">MOE CHARAF REALTY</text>
+  <text x="120" y="466" fill="#334155" font-family="Arial, sans-serif" font-size="34">Call 555-123-4567</text>
+</svg>

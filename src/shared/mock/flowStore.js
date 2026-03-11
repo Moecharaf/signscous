@@ -27,6 +27,27 @@ function makeId(prefix) {
 function makeOrderNumber() {
   return `SC-${Math.floor(100000 + Math.random() * 900000)}`;
 }
+function buildItemDescription(quote) {
+  const sku = quote.skuCode || '';
+  const prefix = sku.split('-')[0];
+  const productNameMap = {
+    YS: 'Yard Signs',
+    BN: 'Banners',
+    AL: 'Aluminum Signs',
+    PVC: 'PVC Signs',
+    ACR: 'Acrylic Signs',
+    WIN: 'Window Graphics',
+  };
+  const productName = productNameMap[prefix] || 'Custom Signs';
+  const parts = [];
+
+  if (quote.input?.size) parts.push(quote.input.size);
+  if (quote.input?.sides) parts.push(quote.input.sides.replace('_', '-'));
+  if (quote.input?.material) parts.push(quote.input.material.replace('_', ' '));
+  if (quote.input?.thickness) parts.push(quote.input.thickness);
+
+  return `${productName}${parts.length ? ` ${parts.join(', ')}` : ''}`;
+}
 
 export function createMockQuote(input) {
   const store = safeRead();
@@ -80,7 +101,7 @@ export function createMockCartFromQuote(quoteId, quantityOverride) {
       {
         cartItemId: makeId('ci'),
         quoteItemId: quote.quoteItemId,
-        description: `Yard Signs ${quote.input.size}, ${quote.input.sides.replace('_', '-')}`,
+          description: buildItemDescription(quote),
         quantity,
         unitPrice: quote.unitPrice,
         lineTotal,

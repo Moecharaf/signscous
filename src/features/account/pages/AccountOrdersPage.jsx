@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../../shared/auth/AuthContext';
 import { getMyMockOrders } from '../../../shared/mock/flowStore';
 import { getMyOrders } from '../../orders/api/ordersApi';
+import { getOrderBadgeMeta } from '../../../shared/ui/productBadge';
 
 export default function AccountOrdersPage() {
   const { user } = useAuth();
@@ -42,7 +43,17 @@ export default function AccountOrdersPage() {
               <div key={order.orderNumber} className="rounded-xl border border-white/10 bg-black/40 p-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <div className="font-semibold">{order.orderNumber}</div>
+                    <div className="flex items-center gap-2">
+                      <div className="font-semibold">{order.orderNumber}</div>
+                      {(() => {
+                        const badge = getOrderBadgeMeta(order.items || []);
+                        return (
+                          <span className={`rounded-full border px-2 py-0.5 text-xs font-semibold ${badge.className}`}>
+                            {badge.label}
+                          </span>
+                        );
+                      })()}
+                    </div>
                     <div className="text-sm text-zinc-400">Status: {order.status}</div>
                   </div>
                   <div className="text-right">

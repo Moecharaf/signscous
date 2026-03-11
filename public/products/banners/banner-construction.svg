@@ -1,0 +1,16 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="600" fill="#111111" />
+  <rect width="1200" height="90" fill="#f59e0b" />
+  <rect y="510" width="1200" height="90" fill="#f59e0b" />
+  <g stroke="#111111" stroke-width="16">
+    <line x1="40" y1="90" x2="220" y2="270" />
+    <line x1="220" y1="90" x2="400" y2="270" />
+    <line x1="400" y1="90" x2="580" y2="270" />
+    <line x1="580" y1="90" x2="760" y2="270" />
+    <line x1="760" y1="90" x2="940" y2="270" />
+    <line x1="940" y1="90" x2="1120" y2="270" />
+  </g>
+  <text x="94" y="340" fill="#f59e0b" font-family="Arial, sans-serif" font-weight="800" font-size="96">COMING SOON</text>
+  <text x="96" y="410" fill="#ffffff" font-family="Arial, sans-serif" font-size="38">NEW LOCATION OPENING THIS SUMMER</text>
+  <text x="96" y="468" fill="#d4d4d8" font-family="Arial, sans-serif" font-size="30">www.example.com | (555) 123-4567</text>
+</svg>
