@@ -150,6 +150,65 @@ export async function createQuote(input) {
   };
 }
 
+// shared helper used by all product quote creators
+async function insertQuote({ input, unitPrice, skuCode, productionDays }) {
+  const quantity = Number(input.quantity || 1);
+  const subtotal = Number((quantity * unitPrice).toFixed(2));
+  const shippingEstimate = 24;
+  const total = Number((subtotal + shippingEstimate).toFixed(2));
+  const quoteId = makeId('quote');
+  const quoteItemId = makeId('qi');
+  const quoteNumber = makeQuoteNumber();
+  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+
+  await pool.query(
+    `INSERT INTO quotes
+       (id, quote_item_id, quote_number, sku_code, input,
+        unit_price, subtotal, shipping_estimate, total, production_days, expires_at)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
+    [quoteId, quoteItemId, quoteNumber, skuCode, JSON.stringify(input),
+     unitPrice, subtotal, shippingEstimate, total, productionDays, expiresAt]
+  );
+
+  return { quoteId, quoteItemId, quoteNumber, skuCode, input, unitPrice, subtotal, shippingEstimate, total, productionDays, expiresAt };
+}
+
+export async function createBannersQuote(input) {
+  const sizeMultipliers = { '2x4': 1.0, '2x6': 1.3, '3x6': 1.6, '3x8': 2.0, '4x8': 2.5, '4x10': 3.0 };
+  const basePrice = 3.50 * (sizeMultipliers[input.size] || 1.0);
+  const unitPrice = Number((basePrice + (input.sides === 'double_sided' ? 1.50 : 0)).toFixed(2));
+  return insertQuote({
+    input,
+    unitPrice,
+    skuCode: `BN-${input.size}-${input.material}-${input.sides}`,
+    productionDays: input.turnaround === 'rush_24h' ? 1 : 2,
+  });
+}
+
+export async function createAluminumSignsQuote(input) {
+  const sizeMultipliers = { '12x18': 1.0, '18x24': 1.5, '24x36': 2.5 };
+  const basePrice = 5.00 * (sizeMultipliers[input.size] || 1.0);
+  const unitPrice = Number((basePrice + (input.thickness === '063' ? 1.50 : 0) + (input.sides === 'double_sided' ? 2.00 : 0)).toFixed(2));
+  return insertQuote({
+    input,
+    unitPrice,
+    skuCode: `AL-${input.size}-${input.thickness}-${input.sides}`,
+    productionDays: input.turnaround === 'rush_24h' ? 1 : 2,
+  });
+}
+
+export async function createPvcSignsQuote(input) {
+  const sizeMultipliers = { '12x18': 1.0, '18x24': 1.5, '24x36': 2.5 };
+  const basePrice = 4.00 * (sizeMultipliers[input.size] || 1.0);
+  const unitPrice = Number((basePrice + (input.thickness === '6mm' ? 1.00 : 0) + (input.sides === 'double_sided' ? 1.50 : 0)).toFixed(2));
+  return insertQuote({
+    input,
+    unitPrice,
+    skuCode: `PVC-${input.size}-${input.thickness}-${input.sides}`,
+    productionDays: input.turnaround === 'rush_24h' ? 1 : 2,
+  });
+}
+
 export async function getQuote(quoteId) {
   const { rows } = await pool.query('SELECT * FROM quotes WHERE id = $1', [quoteId]);
   if (!rows[0]) return null;

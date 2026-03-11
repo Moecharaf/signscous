@@ -10,6 +10,12 @@ import OrderConfirmationPage from '../features/orders/pages/OrderConfirmationPag
 import OrderTrackingPage from '../features/orders/pages/OrderTrackingPage.jsx';
 import YardSignsArtworkPage from '../features/yardSigns/pages/YardSignsArtworkPage.jsx';
 import YardSignsQuotePage from '../features/yardSigns/pages/YardSignsQuotePage.jsx';
+import BannersQuotePage from '../features/banners/pages/BannersQuotePage.jsx';
+import BannersArtworkPage from '../features/banners/pages/BannersArtworkPage.jsx';
+import AluminumSignsQuotePage from '../features/aluminumSigns/pages/AluminumSignsQuotePage.jsx';
+import AluminumSignsArtworkPage from '../features/aluminumSigns/pages/AluminumSignsArtworkPage.jsx';
+import PvcSignsQuotePage from '../features/pvcSigns/pages/PvcSignsQuotePage.jsx';
+import PvcSignsArtworkPage from '../features/pvcSigns/pages/PvcSignsArtworkPage.jsx';
 import ProtectedRoute from '../shared/auth/ProtectedRoute.jsx';
 
 export const appRoutes = [
@@ -34,6 +40,12 @@ export const appRoutes = [
   },
   { path: '/yard-signs', element: <YardSignsQuotePage /> },
   { path: '/yard-signs/artwork/:quoteId', element: <YardSignsArtworkPage /> },
+  { path: '/banners', element: <BannersQuotePage /> },
+  { path: '/banners/artwork/:quoteId', element: <BannersArtworkPage /> },
+  { path: '/aluminum-signs', element: <AluminumSignsQuotePage /> },
+  { path: '/aluminum-signs/artwork/:quoteId', element: <AluminumSignsArtworkPage /> },
+  { path: '/pvc-signs', element: <PvcSignsQuotePage /> },
+  { path: '/pvc-signs/artwork/:quoteId', element: <PvcSignsArtworkPage /> },
   { path: '/cart/:cartId', element: <CartPage /> },
   { path: '/checkout/:cartId', element: <CheckoutPage /> },
   { path: '/order-confirmation/:orderNumber', element: <OrderConfirmationPage /> },

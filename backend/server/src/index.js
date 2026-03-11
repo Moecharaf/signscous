@@ -38,6 +38,10 @@ const {
   verifyPassword,
 } = store;
 
+const createBannersQuote = store.createBannersQuote;
+const createAluminumSignsQuote = store.createAluminumSignsQuote;
+const createPvcSignsQuote = store.createPvcSignsQuote;
+
 const app = express();
 const port = Number(process.env.PORT || 8787);
 const jwtSecret = process.env.JWT_SECRET || 'change-this-secret';
@@ -134,6 +138,45 @@ app.post('/v1/quotes/yard-signs', async (req, res) => {
   }
   try {
     const quote = await createQuote(req.body);
+    return res.json(quote);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+  
+app.post('/v1/quotes/banners', async (req, res) => {
+  const { size, material, sides, finishing, quantity, turnaround } = req.body || {};
+  if (!size || !material || !sides || !finishing || !quantity || !turnaround) {
+    return res.status(400).json({ error: 'Incomplete quote payload.' });
+  }
+  try {
+    const quote = await createBannersQuote(req.body);
+    return res.json(quote);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+app.post('/v1/quotes/aluminum-signs', async (req, res) => {
+  const { size, thickness, sides, finishing, quantity, turnaround } = req.body || {};
+  if (!size || !thickness || !sides || !finishing || !quantity || !turnaround) {
+    return res.status(400).json({ error: 'Incomplete quote payload.' });
+  }
+  try {
+    const quote = await createAluminumSignsQuote(req.body);
+    return res.json(quote);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+app.post('/v1/quotes/pvc-signs', async (req, res) => {
+  const { size, thickness, sides, finishing, quantity, turnaround } = req.body || {};
+  if (!size || !thickness || !sides || !finishing || !quantity || !turnaround) {
+    return res.status(400).json({ error: 'Incomplete quote payload.' });
+  }
+  try {
+    const quote = await createPvcSignsQuote(req.body);
     return res.json(quote);
   } catch (err) {
     return res.status(400).json({ error: err.message });
