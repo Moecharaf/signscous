@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { addQuoteItemToCart, createCartFromQuote } from '../../cart/api/cartApi';
 import { createMockCartFromQuote, getMockQuote } from '../../../shared/mock/flowStore';
+import { ArtworkUploader } from '../../../shared/ui/ArtworkUploader';
 
 const artworkExamples = [
   '/products/acrylic-signs/acrylic-office.svg',
@@ -13,6 +14,7 @@ export default function AcrylicSignsArtworkPage() {
   const location = useLocation();
   const { quoteId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
+  const [artworkFile, setArtworkFile] = useState(null);
 
   const quote = location.state || getMockQuote(quoteId);
 
@@ -61,10 +63,14 @@ export default function AcrylicSignsArtworkPage() {
         </div>
       </div>
 
-      <div className="mt-6 rounded-3xl border border-white/10 bg-zinc-950 p-6">
-        <div className="text-sm text-zinc-400">Artwork status</div>
-        <div className="mt-2 text-lg font-semibold text-white">Preflight passed</div>
+      <div className="mt-6">
+        <ArtworkUploader onChange={setArtworkFile} />
       </div>
+      {artworkFile && (
+        <div className="mt-3 rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-2 text-sm text-green-400">
+          Artwork ready — file will be reviewed after order is placed.
+        </div>
+      )}
 
       <div className="mt-8 flex flex-wrap gap-3">
         <button onClick={handleAddToCart} disabled={isLoading} className="rounded-xl bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-400 disabled:opacity-60">
