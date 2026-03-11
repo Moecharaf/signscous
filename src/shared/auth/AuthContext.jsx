@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { apiLogin, apiMe, apiSignup } from '../../features/auth/api/authApi';
 import {
   getCurrentMockUser,
@@ -7,14 +7,26 @@ import {
   logoutMockUser,
   registerMockUser,
 } from '../mock/authStore';
-import { clearAuthToken, setAuthToken } from './tokenStore';
+import { clearAuthToken, getAuthToken, setAuthToken } from './tokenStore';
 
 const AuthContext = createContext(null);
 
-export function AuthProvider({ children }) {
-  initAuthStore();
+const IS_DEV = import.meta.env.DEV;
 
-  const [user, setUser] = useState(getCurrentMockUser());
+export function AuthProvider({ children }) {
+  if (IS_DEV) initAuthStore();
+
+  // In dev: restore from localStorage mock. In prod: always start null and restore from JWT.
+  const [user, setUser] = useState(IS_DEV ? getCurrentMockUser() : null);
+
+  useEffect(() => {
+    if (IS_DEV) return;
+    const token = getAuthToken();
+    if (!token) return;
+    apiMe()
+      .then(setUser)
+      .catch(() => clearAuthToken());
+  }, []);
 
   const value = useMemo(() => ({
     user,
@@ -29,7 +41,8 @@ export function AuthProvider({ children }) {
         const me = response?.user || (await apiMe());
         setUser(me);
         return me;
-      } catch {
+      } catch (err) {
+        if (!IS_DEV) throw err;
         const loggedIn = loginMockUser(payload);
         setUser(loggedIn);
         return loggedIn;
@@ -44,14 +57,15 @@ export function AuthProvider({ children }) {
         const me = response?.user || (await apiMe());
         setUser(me);
         return me;
-      } catch {
+      } catch (err) {
+        if (!IS_DEV) throw err;
         const signedUp = registerMockUser(payload);
         setUser(signedUp);
         return signedUp;
       }
     },
     logout: () => {
-      logoutMockUser();
+      if (IS_DEV) logoutMockUser();
       clearAuthToken();
       setUser(null);
     },

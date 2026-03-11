@@ -25,7 +25,8 @@ export default function AdminDashboardPage() {
           setCustomers(liveCustomers.customers || []);
         }
       } catch {
-        if (isMounted) {
+        if (!isMounted) return;
+        if (import.meta.env.DEV) {
           setOrders(getAllMockOrders());
           setCustomers(getAllMockUsers());
         }
@@ -45,8 +46,10 @@ export default function AdminDashboardPage() {
       const live = await getAdminOrders();
       setOrders(live.orders || []);
     } catch {
-      updateMockOrderStatus(orderNumber, nextStatus);
-      setOrders(getAllMockOrders());
+      if (import.meta.env.DEV) {
+        updateMockOrderStatus(orderNumber, nextStatus);
+        setOrders(getAllMockOrders());
+      }
     }
   }
 
