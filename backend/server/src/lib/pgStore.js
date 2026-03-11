@@ -409,7 +409,7 @@ export async function getCheckoutTotals(cartId, shippingMethod) {
 
 // ── Orders ────────────────────────────────────────────────────────────────────
 
-export async function placeOrder({ userId, cartId, shippingMethod }) {
+export async function placeOrder({ userId, cartId, shippingMethod, artworkId }) {
   const cart = await getCart(cartId);
   if (!cart) throw new Error('Cart not found.');
 
@@ -425,10 +425,11 @@ export async function placeOrder({ userId, cartId, shippingMethod }) {
     await client.query(
       `INSERT INTO orders
          (id, order_number, user_id, cart_id, status, payment_status,
-          shipping_method, subtotal, shipping, tax, total)
-       VALUES ($1,$2,$3,$4,'paid','captured',$5,$6,$7,$8,$9)`,
+          shipping_method, subtotal, shipping, tax, total, artwork_id)
+       VALUES ($1,$2,$3,$4,'paid','captured',$5,$6,$7,$8,$9,$10)`,
       [orderId, orderNumber, userId || null, cartId,
-       shippingMethod || 'ground', totals.subtotal, totals.shipping, totals.tax, totals.total]
+       shippingMethod || 'ground', totals.subtotal, totals.shipping, totals.tax, totals.total,
+       artworkId || null]
     );
 
     for (const item of cart.items) {
@@ -532,6 +533,7 @@ export async function getAllOrders() {
     orderNumber: o.order_number,
     userId: o.user_id,
     status: o.status,
+    artworkId: o.artwork_id || null,
     totals: {
       subtotal: Number(o.subtotal),
       shipping: Number(o.shipping),
@@ -540,6 +542,22 @@ export async function getAllOrders() {
     },
     createdAt: o.placed_at,
   }));
+}
+
+// ── Artworks ──────────────────────────────────────────────────────────────────
+
+export async function saveArtwork({ id, filename, mimetype, data }) {
+  await pool.query(
+    `INSERT INTO artworks (id, filename, mimetype, data) VALUES ($1, $2, $3, $4)
+     ON CONFLICT (id) DO NOTHING`,
+    [id, filename, mimetype, data]
+  );
+  return id;
+}
+
+export async function getArtworkById(artworkId) {
+  const { rows } = await pool.query('SELECT * FROM artworks WHERE id = $1', [artworkId]);
+  return rows[0] || null;
 }
 
 export async function updateOrderStatus(orderNumber, status) {

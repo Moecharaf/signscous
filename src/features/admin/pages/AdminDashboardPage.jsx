@@ -5,7 +5,7 @@ import { getAdminCustomers, getAdminOrders, updateAdminOrderStatus } from '../ap
 import { getAllMockOrders, updateMockOrderStatus } from '../../../shared/mock/flowStore';
 import { getAllMockUsers } from '../../../shared/mock/authStore';
 import { getOrderBadgeDetails } from '../../../shared/ui/productBadge';
-import { downloadArtwork, getArtwork } from '../../../shared/mock/artworkStore';
+import { downloadArtworkFromServer } from '../../../shared/api/artworkApi';
 
 export default function AdminDashboardPage() {
   const { user, logout } = useAuth();
@@ -135,10 +135,10 @@ export default function AdminDashboardPage() {
                   <div className="text-right">
                     <div className="font-semibold">${Number(order.totals?.total || 0).toFixed(2)}</div>
                     <Link to={`/orders/${order.orderNumber}`} className="text-sm text-orange-400">View tracking</Link>
-                    {getArtwork(order.orderNumber) && (
+                    {order.artworkId && (
                       <button
                         type="button"
-                        onClick={() => downloadArtwork(order.orderNumber)}
+                        onClick={() => downloadArtworkFromServer(order.artworkId).catch(() => alert('Artwork download failed.'))}
                         className="mt-1 flex items-center gap-1 text-sm text-sky-400 hover:text-sky-300"
                       >
                         <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>

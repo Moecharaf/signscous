@@ -3,7 +3,8 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { addQuoteItemToCart, createCartFromQuote } from '../../cart/api/cartApi';
 import { createMockCartFromQuote, getMockQuote } from '../../../shared/mock/flowStore';
 import { ArtworkUploader } from '../../../shared/ui/ArtworkUploader';
-import { saveArtwork } from '../../../shared/mock/artworkStore';
+import { saveArtwork, setCartArtworkId } from '../../../shared/mock/artworkStore';
+import { uploadArtworkToServer } from '../../../shared/api/artworkApi';
 
 const artworkExamples = [
   '/products/banners/banner-retail-sale.svg',
@@ -22,10 +23,16 @@ export default function BannersArtworkPage() {
 
   async function handleAddToCart() {
     setIsLoading(true);
-    if (artworkFile) await saveArtwork(quoteId, artworkFile).catch(() => {});
     try {
       const cart = await createCartFromQuote(quoteId);
-      if (artworkFile) await saveArtwork(cart.cartId, artworkFile).catch(() => {});
+      if (artworkFile) {
+        try {
+          const artworkId = await uploadArtworkToServer(artworkFile);
+          setCartArtworkId(cart.cartId, artworkId);
+        } catch {
+          await saveArtwork(cart.cartId, artworkFile).catch(() => {});
+        }
+      }
       if (quote?.quoteItemId) {
         await addQuoteItemToCart(cart.cartId, quote.quoteItemId, quote.input?.quantity || 1);
       }

@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { calculateCheckoutPrice, placeOrder } from '../api/checkoutApi';
 import { calculateMockCheckoutPrice, placeMockOrder } from '../../../shared/mock/flowStore';
 import { useAuth } from '../../../shared/auth/AuthContext';
-import { linkArtworkToOrder } from '../../../shared/mock/artworkStore';
+import { linkArtworkToOrder, getCartArtworkId } from '../../../shared/mock/artworkStore';
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
@@ -38,12 +38,14 @@ export default function CheckoutPage() {
   async function handlePlaceOrder() {
     setIsLoading(true);
     try {
+      const artworkId = getCartArtworkId(cartId);
       const response = await placeOrder({
         cartId,
         shippingAddressId: 'shipping-demo',
         billingAddressId: 'billing-demo',
         shippingMethod: 'ground',
         paymentMethodToken: 'demo-token',
+        artworkId: artworkId || undefined,
       });
       linkArtworkToOrder(cartId, response.orderNumber);
       navigate(`/order-confirmation/${response.orderNumber}`);

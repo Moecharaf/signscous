@@ -44,6 +44,8 @@ const createAluminumSignsQuote = store.createAluminumSignsQuote;
 const createPvcSignsQuote = store.createPvcSignsQuote;
 const createAcrylicSignsQuote = store.createAcrylicSignsQuote;
 const createWindowGraphicsQuote = store.createWindowGraphicsQuote;
+const saveArtwork = store.saveArtwork || null;
+const getArtworkById = store.getArtworkById || null;
 
 const app = express();
 const port = Number(process.env.PORT || 8787);
@@ -69,7 +71,7 @@ app.use(cors({
     callback(new Error(`CORS blocked for origin: ${origin}`));
   },
 }));
-app.use(express.json());
+app.use(express.json({ limit: '100mb' }));
 
 function signToken(user) {
   return jwt.sign({ sub: user.id, role: user.role }, jwtSecret, { expiresIn: '7d' });
@@ -101,6 +103,43 @@ function adminRequired(req, res, next) {
   }
   return next();
 }
+
+app.post('/v1/artworks', async (req, res) => {
+  try {
+    const { filename, mimetype, data } = req.body || {};
+    if (!filename || !mimetype || !data) {
+      return res.status(400).json({ error: 'filename, mimetype, and data are required.' });
+    }
+    if (!saveArtwork) {
+      return res.status(503).json({ error: 'Artwork storage unavailable (in-memory mode).' });
+    }
+    const { randomBytes } = await import('node:crypto');
+    const artworkId = `artwork-${Date.now()}-${randomBytes(4).toString('hex')}`;
+    await saveArtwork({ id: artworkId, filename, mimetype, data });
+    return res.status(201).json({ artworkId });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/v1/artworks/:artworkId', authRequired, adminRequired, async (req, res) => {
+  try {
+    if (!getArtworkById) {
+      return res.status(503).json({ error: 'Artwork storage unavailable (in-memory mode).' });
+    }
+    const artwork = await getArtworkById(req.params.artworkId);
+    if (!artwork) return res.status(404).json({ error: 'Artwork not found.' });
+    // data is stored as a base64 DataURL: "data:<mimetype>;base64,<data>"
+    const match = artwork.data.match(/^data:([^;]+);base64,(.+)$/);
+    if (!match) return res.status(500).json({ error: 'Invalid artwork data format.' });
+    const buffer = Buffer.from(match[2], 'base64');
+    res.setHeader('Content-Type', artwork.mimetype);
+    res.setHeader('Content-Disposition', `attachment; filename="${artwork.filename}"`);
+    return res.send(buffer);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
 
 app.get('/health', (_req, res) => {
   res.json({ ok: true, store: USE_PG ? 'postgres' : 'memory' });
@@ -308,11 +347,12 @@ app.post('/v1/checkout/price', async (req, res) => {
 
 app.post('/v1/orders', authRequired, async (req, res) => {
   try {
-    const { cartId, shippingMethod } = req.body || {};
+    const { cartId, shippingMethod, artworkId } = req.body || {};
     const result = await placeOrder({
       userId: req.user.id,
       cartId,
       shippingMethod: shippingMethod || 'ground',
+      artworkId: artworkId || null,
     });
     return res.status(201).json(result);
   } catch (err) {

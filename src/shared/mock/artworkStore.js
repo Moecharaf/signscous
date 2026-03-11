@@ -56,3 +56,32 @@ export function linkArtworkToOrder(quoteId, orderNumber) {
 export function getAllArtworkKeys() {
   return Object.keys(read());
 }
+
+// ── artworkId reference store (maps cartId → server artworkId) ────────────────
+// Stores only the tiny ID string, not the file. Used to pass artworkId from
+// the artwork page through to checkout without requiring route state.
+
+const ARTWORK_IDS_KEY = 'signscous-artwork-ids-v1';
+
+function readIds() {
+  if (typeof window === 'undefined') return {};
+  try { return JSON.parse(window.localStorage.getItem(ARTWORK_IDS_KEY) || '{}'); }
+  catch { return {}; }
+}
+
+function writeIds(data) {
+  if (typeof window === 'undefined') return;
+  window.localStorage.setItem(ARTWORK_IDS_KEY, JSON.stringify(data));
+}
+
+export function setCartArtworkId(cartId, artworkId) {
+  if (!cartId || !artworkId) return;
+  const store = readIds();
+  store[cartId] = artworkId;
+  writeIds(store);
+}
+
+export function getCartArtworkId(cartId) {
+  if (!cartId) return null;
+  return readIds()[cartId] || null;
+}

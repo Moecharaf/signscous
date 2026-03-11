@@ -94,3 +94,13 @@ CREATE TABLE IF NOT EXISTS order_events (
 
 CREATE INDEX IF NOT EXISTS idx_order_events_order_number ON order_events(order_number);
 CREATE INDEX IF NOT EXISTS idx_orders_user_id ON orders(user_id);
+
+CREATE TABLE IF NOT EXISTS artworks (
+  id          TEXT        PRIMARY KEY,
+  filename    TEXT        NOT NULL,
+  mimetype    TEXT        NOT NULL,
+  data        TEXT        NOT NULL,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS artwork_id TEXT;
