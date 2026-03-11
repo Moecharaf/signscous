@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { addQuoteItemToCart, createCartFromQuote } from '../../cart/api/cartApi';
 import { createMockCartFromQuote, getMockQuote } from '../../../shared/mock/flowStore';
 import { ArtworkUploader } from '../../../shared/ui/ArtworkUploader';
+import { saveArtwork } from '../../../shared/mock/artworkStore';
 
 export default function YardSignsArtworkPage() {
   const navigate = useNavigate();
@@ -16,9 +17,11 @@ export default function YardSignsArtworkPage() {
 
   async function handleAddToCart() {
     setIsLoading(true);
+    if (artworkFile) await saveArtwork(quoteId, artworkFile).catch(() => {});
     try {
       const cart = await createCartFromQuote(quoteId);
       const cartId = cart.cartId;
+      if (artworkFile) await saveArtwork(cartId, artworkFile).catch(() => {});
 
       if (quote?.quoteItemId) {
         await addQuoteItemToCart(cartId, quote.quoteItemId, quote.input?.quantity || 1);

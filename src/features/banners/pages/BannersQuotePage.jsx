@@ -11,15 +11,31 @@ const bannerSamples = [
   { id: 'event', name: 'Event Promo', src: '/products/banners/banner-event.svg' },
 ];
 
+const BANNER_PRESETS = ['2x4', '2x6', '3x6', '3x8', '4x8', '4x10'];
+
 export default function BannersQuotePage() {
   const navigate = useNavigate();
   const [input, setInput] = useState(bannersDefaults);
   const [selectedSample, setSelectedSample] = useState(bannerSamples[0].id);
+  const [customW, setCustomW] = useState('2');
+  const [customH, setCustomH] = useState('4');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   function set(field) {
     return (e) => setInput({ ...input, [field]: e.target.value });
+  }
+
+  function applySize(w, h) {
+    setCustomW(String(w));
+    setCustomH(String(h));
+    setInput((prev) => ({ ...prev, size: `${w}x${h}` }));
+  }
+
+  function handleDimension(axis, val) {
+    const n = val.replace(/[^0-9]/g, '');
+    if (axis === 'w') { setCustomW(n); setInput((prev) => ({ ...prev, size: `${n || 0}x${customH}` })); }
+    else { setCustomH(n); setInput((prev) => ({ ...prev, size: `${customW}x${n || 0}` })); }
   }
 
   async function handleContinue() {
@@ -70,16 +86,37 @@ export default function BannersQuotePage() {
 
         <div className="grid gap-3 text-sm text-zinc-300 sm:grid-cols-2">
 
-          <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Size
-            <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.size} onChange={set('size')}>
-              <option value="2x4">2ft × 4ft</option>
-              <option value="2x6">2ft × 6ft</option>
-              <option value="3x6">3ft × 6ft</option>
-              <option value="3x8">3ft × 8ft</option>
-              <option value="4x8">4ft × 8ft</option>
-              <option value="4x10">4ft × 10ft</option>
-            </select>
-          </label>
+          <div className="col-span-2 rounded-xl border border-white/10 bg-black/50 px-4 py-3">
+            <div className="mb-2 text-sm text-zinc-300">Size (feet)</div>
+            <div className="mb-3 flex flex-wrap gap-2">
+              {BANNER_PRESETS.map((p) => {
+                const [pw, ph] = p.split('x');
+                return (
+                  <button key={p} type="button" onClick={() => applySize(pw, ph)}
+                    className={`rounded-lg border px-3 py-1 text-xs font-semibold transition ${input.size === p ? 'border-orange-500 bg-orange-500/20 text-orange-300' : 'border-white/15 text-zinc-300 hover:border-white/40'}`}>
+                    {pw}ft × {ph}ft
+                  </button>
+                );
+              })}
+            </div>
+            <div className="flex items-center gap-3">
+              <label className="flex-1">
+                <span className="text-xs text-zinc-500">Width (ft)</span>
+                <div className="mt-1 flex items-center rounded-lg bg-zinc-900 px-3 py-2">
+                  <input type="number" min="1" max="50" value={customW} onChange={(e) => handleDimension('w', e.target.value)} className="w-full bg-transparent text-sm text-white outline-none" />
+                  <span className="text-xs text-zinc-500">ft</span>
+                </div>
+              </label>
+              <span className="mt-5 text-zinc-500">×</span>
+              <label className="flex-1">
+                <span className="text-xs text-zinc-500">Height (ft)</span>
+                <div className="mt-1 flex items-center rounded-lg bg-zinc-900 px-3 py-2">
+                  <input type="number" min="1" max="50" value={customH} onChange={(e) => handleDimension('h', e.target.value)} className="w-full bg-transparent text-sm text-white outline-none" />
+                  <span className="text-xs text-zinc-500">ft</span>
+                </div>
+              </label>
+            </div>
+          </div>
 
           <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Material
             <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.material} onChange={set('material')}>

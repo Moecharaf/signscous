@@ -5,11 +5,27 @@ import { yardSignsDefaults } from '../model/yardSignsDefaults';
 import { validateYardSignsInput } from '../model/yardSignsValidation';
 import { createMockQuote } from '../../../shared/mock/flowStore';
 
+const YARD_SIGN_PRESETS = ['18x24', '24x18', '24x36', '36x48'];
+
 export default function YardSignsQuotePage() {
   const navigate = useNavigate();
   const [input, setInput] = useState(yardSignsDefaults);
+  const [customW, setCustomW] = useState('18');
+  const [customH, setCustomH] = useState('24');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  function applySize(w, h) {
+    setCustomW(String(w));
+    setCustomH(String(h));
+    setInput((prev) => ({ ...prev, size: `${w}x${h}` }));
+  }
+
+  function handleDimension(axis, val) {
+    const n = val.replace(/[^0-9]/g, '');
+    if (axis === 'w') { setCustomW(n); setInput((prev) => ({ ...prev, size: `${n || 0}x${customH}` })); }
+    else { setCustomH(n); setInput((prev) => ({ ...prev, size: `${customW}x${n || 0}` })); }
+  }
 
   async function handleContinue() {
     const errors = validateYardSignsInput(input);
@@ -48,13 +64,37 @@ export default function YardSignsQuotePage() {
 
       <div className="mt-8 rounded-3xl border border-white/10 bg-zinc-950 p-6">
         <div className="grid gap-3 text-sm text-zinc-300 sm:grid-cols-2">
-          <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Size
-            <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.size} onChange={(e) => setInput({ ...input, size: e.target.value })}>
-              <option value="18x24">18x24</option>
-              <option value="24x18">24x18</option>
-              <option value="24x36">24x36</option>
-            </select>
-          </label>
+          <div className="col-span-2 rounded-xl border border-white/10 bg-black/50 px-4 py-3">
+            <div className="mb-2 text-sm text-zinc-300">Size (inches)</div>
+            <div className="mb-3 flex flex-wrap gap-2">
+              {YARD_SIGN_PRESETS.map((p) => {
+                const [pw, ph] = p.split('x');
+                return (
+                  <button key={p} type="button" onClick={() => applySize(pw, ph)}
+                    className={`rounded-lg border px-3 py-1 text-xs font-semibold transition ${input.size === p ? 'border-orange-500 bg-orange-500/20 text-orange-300' : 'border-white/15 text-zinc-300 hover:border-white/40'}`}>
+                    {p} in
+                  </button>
+                );
+              })}
+            </div>
+            <div className="flex items-center gap-3">
+              <label className="flex-1">
+                <span className="text-xs text-zinc-500">Width</span>
+                <div className="mt-1 flex items-center rounded-lg bg-zinc-900 px-3 py-2">
+                  <input type="number" min="1" max="240" value={customW} onChange={(e) => handleDimension('w', e.target.value)} className="w-full bg-transparent text-sm text-white outline-none" />
+                  <span className="text-xs text-zinc-500">in</span>
+                </div>
+              </label>
+              <span className="mt-5 text-zinc-500">×</span>
+              <label className="flex-1">
+                <span className="text-xs text-zinc-500">Height</span>
+                <div className="mt-1 flex items-center rounded-lg bg-zinc-900 px-3 py-2">
+                  <input type="number" min="1" max="240" value={customH} onChange={(e) => handleDimension('h', e.target.value)} className="w-full bg-transparent text-sm text-white outline-none" />
+                  <span className="text-xs text-zinc-500">in</span>
+                </div>
+              </label>
+            </div>
+          </div>
           <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Material
             <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.material} onChange={(e) => setInput({ ...input, material: e.target.value })}>
               <option value="coroplast_4mm">4mm Coroplast</option>
