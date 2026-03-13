@@ -5,4 +5,10 @@ export const bannersDefaults = {
   finishing: 'hemmed_grommets',
   quantity: 10,
   turnaround: 'standard_48h',
+  hem: 'all_sides',
+  grommets: 'every_2ft',
+  polePocket: 'none',
+  windSlits: 'no',
+  webbing: 'no',
+  notes: '',
 };

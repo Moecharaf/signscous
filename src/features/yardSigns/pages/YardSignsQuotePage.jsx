@@ -110,6 +110,56 @@ export default function YardSignsQuotePage() {
           <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Quantity
             <input type="number" min="1" className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.quantity} onChange={(e) => setInput({ ...input, quantity: Number(e.target.value) })} />
           </label>
+          <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Turnaround
+            <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.turnaround} onChange={(e) => setInput({ ...input, turnaround: e.target.value })}>
+              <option value="standard_48h">Standard 48h</option>
+              <option value="rush_24h">Rush 24h</option>
+            </select>
+          </label>
+
+          <div className="col-span-2 rounded-xl border border-white/10 bg-black/50 px-4 py-3">
+            <div className="mb-3 text-sm font-semibold text-zinc-200">Advanced Options</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label>Grommets
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.grommets} onChange={(e) => setInput({ ...input, grommets: e.target.value })}>
+                  <option value="none">No Grommets</option>
+                  <option value="corners_only">Corners Only</option>
+                  <option value="all_sides">All Sides</option>
+                </select>
+              </label>
+              <label>Stakes
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.stakes} onChange={(e) => setInput({ ...input, stakes: e.target.value })}>
+                  <option value="h_stakes">H Stakes</option>
+                  <option value="u_stakes">U Stakes</option>
+                  <option value="none">No Stakes</option>
+                </select>
+              </label>
+              <label>Shape Cut
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.contourCut} onChange={(e) => setInput({ ...input, contourCut: e.target.value })}>
+                  <option value="none">Rectangle (Standard)</option>
+                  <option value="circle">Circle Cut</option>
+                  <option value="custom_contour">Custom Contour</option>
+                </select>
+              </label>
+              <label>Proofing
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.proof} onChange={(e) => setInput({ ...input, proof: e.target.value })}>
+                  <option value="online_proof">Free Online Proof</option>
+                  <option value="pdf_proof">PDF Proof Required</option>
+                  <option value="no_proof">No Proof Needed</option>
+                </select>
+              </label>
+              <label className="sm:col-span-2">Packaging
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.packaging} onChange={(e) => setInput({ ...input, packaging: e.target.value })}>
+                  <option value="bulk">Bulk Pack</option>
+                  <option value="sets_of_10">Bundle in Sets of 10</option>
+                  <option value="single_polybag">Single Polybag</option>
+                </select>
+              </label>
+              <label className="sm:col-span-2">Special Instructions
+                <textarea rows="3" className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.notes} onChange={(e) => setInput({ ...input, notes: e.target.value })} placeholder="Hole positions, stake packing notes, special handling..." />
+              </label>
+            </div>
+          </div>
         </div>
       </div>
 

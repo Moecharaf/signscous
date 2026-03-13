@@ -5,4 +5,10 @@ export const acrylicSignsDefaults = {
   mounting: 'standoffs',
   quantity: 10,
   turnaround: 'standard_48h',
+  edgePolish: 'standard',
+  cornerStyle: 'square',
+  whiteInk: 'no',
+  mountingKit: 'standoffs',
+  protectiveMask: 'both_sides',
+  notes: '',
 };

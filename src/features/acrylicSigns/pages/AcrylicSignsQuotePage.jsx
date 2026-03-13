@@ -148,6 +148,47 @@ export default function AcrylicSignsQuotePage() {
               <option value="rush_24h">Rush 24h</option>
             </select>
           </label>
+
+          <div className="col-span-2 rounded-xl border border-white/10 bg-black/50 px-4 py-3">
+            <div className="mb-3 text-sm font-semibold text-zinc-200">Advanced Options</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label>Edge Polish
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.edgePolish} onChange={set('edgePolish')}>
+                  <option value="standard">Standard Edge</option>
+                  <option value="polished">Diamond Polished</option>
+                </select>
+              </label>
+              <label>Corner Style
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.cornerStyle} onChange={set('cornerStyle')}>
+                  <option value="square">Square</option>
+                  <option value="rounded">Rounded</option>
+                </select>
+              </label>
+              <label>White Ink Layer
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.whiteInk} onChange={set('whiteInk')}>
+                  <option value="no">No</option>
+                  <option value="yes">Yes</option>
+                </select>
+              </label>
+              <label>Mounting Kit
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.mountingKit} onChange={set('mountingKit')}>
+                  <option value="standoffs">Standoff Set</option>
+                  <option value="spacers">Spacer Kit</option>
+                  <option value="none">No Hardware</option>
+                </select>
+              </label>
+              <label className="sm:col-span-2">Protective Masking
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.protectiveMask} onChange={set('protectiveMask')}>
+                  <option value="both_sides">Both Sides</option>
+                  <option value="front_only">Front Only</option>
+                  <option value="none">No Masking</option>
+                </select>
+              </label>
+              <label className="sm:col-span-2">Special Instructions
+                <textarea rows="3" className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.notes} onChange={set('notes')} placeholder="Polish zones, mounting offsets, corner radius preferences..." />
+              </label>
+            </div>
+          </div>
         </div>
       </div>
 

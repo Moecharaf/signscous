@@ -5,4 +5,10 @@ export const yardSignsDefaults = {
   quantity: 100,
   turnaround: 'standard_48h',
   finishing: 'none',
+  grommets: 'none',
+  stakes: 'h_stakes',
+  contourCut: 'none',
+  proof: 'online_proof',
+  packaging: 'bulk',
+  notes: '',
 };

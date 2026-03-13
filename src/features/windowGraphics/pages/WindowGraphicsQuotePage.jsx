@@ -149,6 +149,50 @@ export default function WindowGraphicsQuotePage() {
               <option value="rush_24h">Rush 24h</option>
             </select>
           </label>
+
+          <div className="col-span-2 rounded-xl border border-white/10 bg-black/50 px-4 py-3">
+            <div className="mb-3 text-sm font-semibold text-zinc-200">Advanced Options</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label>Opacity Mode
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.opacityMode} onChange={set('opacityMode')}>
+                  <option value="full_color">Full Color</option>
+                  <option value="white_ink">White Ink + Color</option>
+                  <option value="clear_only">Clear/No Ink</option>
+                </select>
+              </label>
+              <label>Adhesive
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.adhesive} onChange={set('adhesive')}>
+                  <option value="removable">Removable</option>
+                  <option value="permanent">Permanent</option>
+                  <option value="static_cling">Static Cling</option>
+                </select>
+              </label>
+              <label>Cut Type
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.cutType} onChange={set('cutType')}>
+                  <option value="square_cut">Square Cut</option>
+                  <option value="contour_cut">Contour Cut</option>
+                  <option value="kiss_cut">Kiss Cut</option>
+                </select>
+              </label>
+              <label>Perforation Pattern
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.perforation} onChange={set('perforation')}>
+                  <option value="70_30">70/30</option>
+                  <option value="60_40">60/40</option>
+                  <option value="50_50">50/50</option>
+                </select>
+              </label>
+              <label className="sm:col-span-2">Install Kit
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.installKit} onChange={set('installKit')}>
+                  <option value="none">No Kit</option>
+                  <option value="squeegee">Squeegee</option>
+                  <option value="full_kit">Full Install Kit</option>
+                </select>
+              </label>
+              <label className="sm:col-span-2">Special Instructions
+                <textarea rows="3" className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.notes} onChange={set('notes')} placeholder="Inside mount notes, white ink zones, contour path details..." />
+              </label>
+            </div>
+          </div>
         </div>
       </div>
 

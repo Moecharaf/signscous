@@ -150,6 +150,50 @@ export default function PvcSignsQuotePage() {
             </select>
           </label>
 
+          <div className="col-span-2 rounded-xl border border-white/10 bg-black/50 px-4 py-3">
+            <div className="mb-3 text-sm font-semibold text-zinc-200">Advanced Options</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label>Edge Style
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.edgeStyle} onChange={set('edgeStyle')}>
+                  <option value="square">Square</option>
+                  <option value="rounded">Rounded</option>
+                </select>
+              </label>
+              <label>Hole Drilling
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.holeDrilling} onChange={set('holeDrilling')}>
+                  <option value="none">No Holes</option>
+                  <option value="4_corners">4 Corners</option>
+                  <option value="top_bottom">Top & Bottom Center</option>
+                  <option value="left_right">Left & Right Center</option>
+                </select>
+              </label>
+              <label>UV Coating
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.uvCoating} onChange={set('uvCoating')}>
+                  <option value="no">No</option>
+                  <option value="yes">Yes</option>
+                </select>
+              </label>
+              <label>Lamination
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.lamination} onChange={set('lamination')}>
+                  <option value="none">No Lamination</option>
+                  <option value="matte">Matte</option>
+                  <option value="gloss">Gloss</option>
+                </select>
+              </label>
+              <label className="sm:col-span-2">Mounting Hardware
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.mountingHardware} onChange={set('mountingHardware')}>
+                  <option value="none">None</option>
+                  <option value="easel">Easel Back</option>
+                  <option value="double_tape">Double-Sided Tape</option>
+                  <option value="standoffs">Standoff Set</option>
+                </select>
+              </label>
+              <label className="sm:col-span-2">Special Instructions
+                <textarea rows="3" className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.notes} onChange={set('notes')} placeholder="Edge finish, UV requirements, exact mounting details..." />
+              </label>
+            </div>
+          </div>
+
         </div>
       </div>
 

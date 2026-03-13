@@ -151,6 +151,49 @@ export default function BannersQuotePage() {
             </select>
           </label>
 
+          <div className="col-span-2 rounded-xl border border-white/10 bg-black/50 px-4 py-3">
+            <div className="mb-3 text-sm font-semibold text-zinc-200">Advanced Options</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label>Hem Option
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.hem} onChange={set('hem')}>
+                  <option value="all_sides">Hem All Sides</option>
+                  <option value="top_bottom">Hem Top & Bottom</option>
+                  <option value="none">No Hem</option>
+                </select>
+              </label>
+              <label>Grommets
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.grommets} onChange={set('grommets')}>
+                  <option value="every_2ft">Every 2 Feet</option>
+                  <option value="corners_only">Corners Only</option>
+                  <option value="none">No Grommets</option>
+                </select>
+              </label>
+              <label>Pole Pocket
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.polePocket} onChange={set('polePocket')}>
+                  <option value="none">None</option>
+                  <option value="top">Top</option>
+                  <option value="bottom">Bottom</option>
+                  <option value="top_bottom">Top & Bottom</option>
+                </select>
+              </label>
+              <label>Wind Slits
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.windSlits} onChange={set('windSlits')}>
+                  <option value="no">No</option>
+                  <option value="yes">Yes</option>
+                </select>
+              </label>
+              <label className="sm:col-span-2">Webbing Reinforcement
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.webbing} onChange={set('webbing')}>
+                  <option value="no">No Webbing</option>
+                  <option value="yes">Add Webbing</option>
+                </select>
+              </label>
+              <label className="sm:col-span-2">Special Instructions
+                <textarea rows="3" className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.notes} onChange={set('notes')} placeholder="Pole pocket diameter, grommet placement, wind slit details..." />
+              </label>
+            </div>
+          </div>
+
         </div>
       </div>
 

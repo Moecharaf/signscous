@@ -150,6 +150,50 @@ export default function AluminumSignsQuotePage() {
             </select>
           </label>
 
+          <div className="col-span-2 rounded-xl border border-white/10 bg-black/50 px-4 py-3">
+            <div className="mb-3 text-sm font-semibold text-zinc-200">Advanced Options</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label>Corner Style
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.cornerStyle} onChange={set('cornerStyle')}>
+                  <option value="square">Square Corners</option>
+                  <option value="rounded_1in">Rounded (1 inch)</option>
+                </select>
+              </label>
+              <label>Hole Drilling
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.holeDrilling} onChange={set('holeDrilling')}>
+                  <option value="none">No Holes</option>
+                  <option value="4_corners">4 Corners</option>
+                  <option value="top_bottom">Top & Bottom Center</option>
+                  <option value="left_right">Left & Right Center</option>
+                </select>
+              </label>
+              <label>Reflective Overlay
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.reflective} onChange={set('reflective')}>
+                  <option value="none">No Reflective</option>
+                  <option value="egp">Engineer Grade</option>
+                  <option value="hip">High Intensity</option>
+                </select>
+              </label>
+              <label>Lamination
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.lamination} onChange={set('lamination')}>
+                  <option value="none">No Lamination</option>
+                  <option value="matte">Matte</option>
+                  <option value="gloss">Gloss</option>
+                </select>
+              </label>
+              <label className="sm:col-span-2">Mounting Hardware
+                <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.mountingHardware} onChange={set('mountingHardware')}>
+                  <option value="none">None</option>
+                  <option value="screws">Screws + Washers</option>
+                  <option value="standoffs">Standoff Set</option>
+                </select>
+              </label>
+              <label className="sm:col-span-2">Special Instructions
+                <textarea rows="3" className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.notes} onChange={set('notes')} placeholder="Exact hole offsets, rounded corner radius, reflective area notes..." />
+              </label>
+            </div>
+          </div>
+
         </div>
       </div>
 
