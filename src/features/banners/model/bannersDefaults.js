@@ -1,4 +1,5 @@
 export const bannersDefaults = {
+  bannerType: 'hd_banner',
   size: '2x4',
   material: 'vinyl_13oz',
   sides: 'single_sided',

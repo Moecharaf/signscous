@@ -5,10 +5,56 @@ import { bannersDefaults } from '../model/bannersDefaults';
 import { validateBannersInput } from '../model/bannersValidation';
 import { createMockQuote } from '../../../shared/mock/flowStore';
 
-const bannerSamples = [
-  { id: 'retail', name: 'Retail Sale', src: '/products/banners/banner-retail-sale.svg' },
-  { id: 'construction', name: 'Construction Notice', src: '/products/banners/banner-construction.svg' },
-  { id: 'event', name: 'Event Promo', src: '/products/banners/banner-event.svg' },
+const BANNER_TYPES = [
+  {
+    id: 'hd_banner',
+    name: 'HD Banner',
+    subtitle: 'Premium Vinyl Scrim Banner',
+    src: '/products/banners/banner-retail-sale.svg',
+    defaultMaterial: 'vinyl_13oz',
+  },
+  {
+    id: 'hdpe',
+    name: 'HDPE',
+    subtitle: 'Water & Tear Resistant Paper',
+    src: '/products/banners/banner-construction.svg',
+    defaultMaterial: 'hdpe_paper',
+  },
+  {
+    id: 'canvas',
+    name: 'Canvas',
+    subtitle: 'Poly-Cotton Blend, Stretch & Frame',
+    src: '/products/banners/banner-event.svg',
+    defaultMaterial: 'canvas_polycotton',
+  },
+  {
+    id: 'mesh',
+    name: 'Mesh',
+    subtitle: 'Polyester with Air-Flow Perforation',
+    src: '/products/banners/banner-construction.svg',
+    defaultMaterial: 'mesh_10oz',
+  },
+  {
+    id: 'poster',
+    name: 'Poster',
+    subtitle: 'Bright White Paper, Short-Term Indoor',
+    src: '/products/banners/banner-retail-sale.svg',
+    defaultMaterial: 'poster_paper',
+  },
+  {
+    id: 'no_curl',
+    name: 'No Curl Banner',
+    subtitle: 'No Edge Curl Material',
+    src: '/products/banners/banner-event.svg',
+    defaultMaterial: 'vinyl_no_curl',
+  },
+  {
+    id: 'econo_stand',
+    name: 'Econo Stand',
+    subtitle: 'Economical Banner Stand Solution',
+    src: '/products/banners/banner-retail-sale.svg',
+    defaultMaterial: 'stand_bundle',
+  },
 ];
 
 const BANNER_PRESETS = ['2x4', '2x6', '3x6', '3x8', '4x8', '4x10'];
@@ -16,7 +62,6 @@ const BANNER_PRESETS = ['2x4', '2x6', '3x6', '3x8', '4x8', '4x10'];
 export default function BannersQuotePage() {
   const navigate = useNavigate();
   const [input, setInput] = useState(bannersDefaults);
-  const [selectedSample, setSelectedSample] = useState(bannerSamples[0].id);
   const [customW, setCustomW] = useState('2');
   const [customH, setCustomH] = useState('4');
   const [error, setError] = useState('');
@@ -24,6 +69,16 @@ export default function BannersQuotePage() {
 
   function set(field) {
     return (e) => setInput({ ...input, [field]: e.target.value });
+  }
+
+  function applyBannerType(typeId) {
+    const selected = BANNER_TYPES.find((item) => item.id === typeId);
+    if (!selected) return;
+    setInput((prev) => ({
+      ...prev,
+      bannerType: selected.id,
+      material: selected.defaultMaterial || prev.material,
+    }));
   }
 
   function applySize(w, h) {
@@ -58,27 +113,30 @@ export default function BannersQuotePage() {
   return (
     <section className="mx-auto max-w-4xl px-6 py-16 text-zinc-100">
       <h1 className="text-4xl font-black">Banners Quote</h1>
-      <p className="mt-3 text-zinc-400">Configure size, material, finishing, quantity, and turnaround for real-time vinyl banner pricing.</p>
+      <p className="mt-3 text-zinc-400">Choose from 7 banner product families, then configure size, finishing, quantity, and turnaround.</p>
 
       <div className="mt-8 rounded-3xl border border-white/10 bg-zinc-950 p-6">
-        <div className="mb-5 text-sm font-semibold text-zinc-200">Sample banner designs</div>
-        <div className="grid gap-3 sm:grid-cols-3">
-          {bannerSamples.map((sample) => (
+        <div className="mb-5 text-sm font-semibold text-zinc-200">Banner product types</div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {BANNER_TYPES.map((sample) => (
             <button
               key={sample.id}
               type="button"
-              onClick={() => setSelectedSample(sample.id)}
-              className={`overflow-hidden rounded-2xl border text-left transition ${selectedSample === sample.id ? 'border-orange-500' : 'border-white/10 hover:border-white/30'}`}
+              onClick={() => applyBannerType(sample.id)}
+              className={`overflow-hidden rounded-2xl border text-left transition ${input.bannerType === sample.id ? 'border-orange-500' : 'border-white/10 hover:border-white/30'}`}
             >
               <img src={sample.src} alt={sample.name} className="h-28 w-full object-cover" />
-              <div className="bg-black/60 px-3 py-2 text-xs text-zinc-200">{sample.name}</div>
+              <div className="bg-black/60 px-3 py-2">
+                <div className="text-xs font-semibold text-zinc-100">{sample.name}</div>
+                <div className="text-[11px] text-zinc-300">{sample.subtitle}</div>
+              </div>
             </button>
           ))}
         </div>
 
         <div className="mt-5 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
           <img
-            src={bannerSamples.find((sample) => sample.id === selectedSample)?.src}
+            src={BANNER_TYPES.find((sample) => sample.id === input.bannerType)?.src}
             alt="Selected banner preview"
             className="h-44 w-full object-cover"
           />
@@ -122,6 +180,12 @@ export default function BannersQuotePage() {
             <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.material} onChange={set('material')}>
               <option value="vinyl_13oz">13oz Vinyl</option>
               <option value="vinyl_18oz">18oz Vinyl (Heavy)</option>
+              <option value="hdpe_paper">HDPE Paper</option>
+              <option value="canvas_polycotton">Canvas Poly-Cotton</option>
+              <option value="mesh_10oz">10oz Mesh</option>
+              <option value="poster_paper">Poster Paper</option>
+              <option value="vinyl_no_curl">No Curl Vinyl</option>
+              <option value="stand_bundle">Banner + Econo Stand Kit</option>
             </select>
           </label>
 
