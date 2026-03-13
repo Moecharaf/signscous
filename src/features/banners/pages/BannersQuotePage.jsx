@@ -110,41 +110,64 @@ export default function BannersQuotePage() {
     }
   }
 
+  const selectedType = BANNER_TYPES.find((sample) => sample.id === input.bannerType) || BANNER_TYPES[0];
+
   return (
-    <section className="mx-auto max-w-4xl px-6 py-16 text-zinc-100">
-      <h1 className="text-4xl font-black">Banners Quote</h1>
-      <p className="mt-3 text-zinc-400">Choose from 7 banner product families, then configure size, finishing, quantity, and turnaround.</p>
-
-      <div className="mt-8 rounded-3xl border border-white/10 bg-zinc-950 p-6">
-        <div className="mb-5 text-sm font-semibold text-zinc-200">Banner product types</div>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {BANNER_TYPES.map((sample) => (
-            <button
-              key={sample.id}
-              type="button"
-              onClick={() => applyBannerType(sample.id)}
-              className={`overflow-hidden rounded-2xl border text-left transition ${input.bannerType === sample.id ? 'border-orange-500' : 'border-white/10 hover:border-white/30'}`}
-            >
-              <img src={sample.src} alt={sample.name} className="h-28 w-full object-cover" />
-              <div className="bg-black/60 px-3 py-2">
-                <div className="text-xs font-semibold text-zinc-100">{sample.name}</div>
-                <div className="text-[11px] text-zinc-300">{sample.subtitle}</div>
-              </div>
-            </button>
-          ))}
+    <section className="mx-auto max-w-6xl px-6 py-16 text-zinc-100">
+      <div className="overflow-hidden rounded-3xl border border-orange-500/20 bg-gradient-to-br from-zinc-950 via-zinc-950 to-orange-950/30 p-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/30 bg-orange-500/10 px-3 py-1 text-xs font-semibold text-orange-300">
+              Banner Configurator
+            </div>
+            <h1 className="mt-3 text-4xl font-black tracking-tight">Banners Quote</h1>
+            <p className="mt-2 max-w-2xl text-sm text-zinc-300">
+              Build your order with 7 product families, custom dimensions, finishing controls, and production preferences.
+            </p>
+          </div>
+          <div className="grid grid-cols-3 gap-2 text-center text-xs">
+            <div className="rounded-xl border border-white/10 bg-black/30 px-3 py-2"><div className="font-bold text-orange-300">7</div><div className="text-zinc-400">Types</div></div>
+            <div className="rounded-xl border border-white/10 bg-black/30 px-3 py-2"><div className="font-bold text-orange-300">6</div><div className="text-zinc-400">Sizes</div></div>
+            <div className="rounded-xl border border-white/10 bg-black/30 px-3 py-2"><div className="font-bold text-orange-300">24h</div><div className="text-zinc-400">Rush</div></div>
+          </div>
         </div>
+      </div>
 
-        <div className="mt-5 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
-          <img
-            src={BANNER_TYPES.find((sample) => sample.id === input.bannerType)?.src}
-            alt="Selected banner preview"
-            className="h-44 w-full object-cover"
-          />
-        </div>
+      <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_280px]">
+        <div className="rounded-3xl border border-white/10 bg-zinc-950 p-6">
+          <div className="mb-5 text-sm font-semibold text-zinc-200">Banner product types</div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {BANNER_TYPES.map((sample) => (
+              <button
+                key={sample.id}
+                type="button"
+                onClick={() => applyBannerType(sample.id)}
+                className={`overflow-hidden rounded-2xl border text-left transition hover:-translate-y-0.5 ${input.bannerType === sample.id ? 'border-orange-500 ring-2 ring-orange-500/20' : 'border-white/10 hover:border-white/30'}`}
+              >
+                <img src={sample.src} alt={sample.name} className="h-28 w-full object-cover" />
+                <div className="bg-black/60 px-3 py-2">
+                  <div className="text-xs font-semibold text-zinc-100">{sample.name}</div>
+                  <div className="text-[11px] text-zinc-300">{sample.subtitle}</div>
+                </div>
+              </button>
+            ))}
+          </div>
 
-        <div className="grid gap-3 text-sm text-zinc-300 sm:grid-cols-2">
+          <div className="mt-5 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
+            <img
+              src={selectedType.src}
+              alt="Selected banner preview"
+              className="h-48 w-full object-cover"
+            />
+            <div className="flex items-center justify-between border-t border-white/10 bg-black/50 px-4 py-2 text-xs">
+              <span className="font-semibold text-zinc-200">{selectedType.name}</span>
+              <span className="rounded-full border border-white/15 px-2 py-0.5 text-zinc-300">{selectedType.subtitle}</span>
+            </div>
+          </div>
 
-          <div className="col-span-2 rounded-xl border border-white/10 bg-black/50 px-4 py-3">
+          <div className="mt-5 grid gap-3 text-sm text-zinc-300 sm:grid-cols-2">
+
+          <div className="col-span-2 rounded-2xl border border-white/10 bg-black/40 px-4 py-3">
             <div className="mb-2 text-sm text-zinc-300">Size (feet)</div>
             <div className="mb-3 flex flex-wrap gap-2">
               {BANNER_PRESETS.map((p) => {
@@ -176,7 +199,7 @@ export default function BannersQuotePage() {
             </div>
           </div>
 
-          <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Material
+          <label className="rounded-2xl border border-white/10 bg-black/40 px-4 py-3">Material
             <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.material} onChange={set('material')}>
               <option value="vinyl_13oz">13oz Vinyl</option>
               <option value="vinyl_18oz">18oz Vinyl (Heavy)</option>
@@ -189,14 +212,14 @@ export default function BannersQuotePage() {
             </select>
           </label>
 
-          <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Print Sides
+          <label className="rounded-2xl border border-white/10 bg-black/40 px-4 py-3">Print Sides
             <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.sides} onChange={set('sides')}>
               <option value="single_sided">Single-sided</option>
               <option value="double_sided">Double-sided</option>
             </select>
           </label>
 
-          <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Finishing
+          <label className="rounded-2xl border border-white/10 bg-black/40 px-4 py-3">Finishing
             <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.finishing} onChange={set('finishing')}>
               <option value="hemmed_grommets">Hemmed + Grommets</option>
               <option value="pole_pocket">Pole Pocket</option>
@@ -204,18 +227,18 @@ export default function BannersQuotePage() {
             </select>
           </label>
 
-          <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Quantity
+          <label className="rounded-2xl border border-white/10 bg-black/40 px-4 py-3">Quantity
             <input type="number" min="1" className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.quantity} onChange={(e) => setInput({ ...input, quantity: Number(e.target.value) })} />
           </label>
 
-          <label className="rounded-xl border border-white/10 bg-black/50 px-4 py-3">Turnaround
+          <label className="rounded-2xl border border-white/10 bg-black/40 px-4 py-3">Turnaround
             <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.turnaround} onChange={set('turnaround')}>
               <option value="standard_48h">Standard 48h</option>
               <option value="rush_24h">Rush 24h</option>
             </select>
           </label>
 
-          <div className="col-span-2 rounded-xl border border-white/10 bg-black/50 px-4 py-3">
+          <div className="col-span-2 rounded-2xl border border-white/10 bg-black/40 px-4 py-3">
             <div className="mb-3 text-sm font-semibold text-zinc-200">Advanced Options</div>
             <div className="grid gap-3 sm:grid-cols-2">
               <label>Hem Option
@@ -258,13 +281,29 @@ export default function BannersQuotePage() {
             </div>
           </div>
 
+          </div>
         </div>
+
+        <aside className="h-fit rounded-3xl border border-white/10 bg-zinc-950 p-4 lg:sticky lg:top-6">
+          <div className="text-xs font-semibold uppercase tracking-wide text-zinc-400">Live Quote Snapshot</div>
+          <div className="mt-3 rounded-2xl border border-orange-500/20 bg-orange-500/10 p-3">
+            <div className="text-sm font-semibold text-orange-300">{selectedType.name}</div>
+            <div className="text-xs text-zinc-300">{customW || 0}ft x {customH || 0}ft • Qty {input.quantity || 0}</div>
+          </div>
+          <div className="mt-3 space-y-2 text-xs">
+            <div className="flex items-center justify-between rounded-lg border border-white/10 bg-black/30 px-2 py-1.5"><span className="text-zinc-400">Material</span><span className="text-zinc-200">{input.material}</span></div>
+            <div className="flex items-center justify-between rounded-lg border border-white/10 bg-black/30 px-2 py-1.5"><span className="text-zinc-400">Sides</span><span className="text-zinc-200">{input.sides}</span></div>
+            <div className="flex items-center justify-between rounded-lg border border-white/10 bg-black/30 px-2 py-1.5"><span className="text-zinc-400">Finishing</span><span className="text-zinc-200">{input.finishing}</span></div>
+            <div className="flex items-center justify-between rounded-lg border border-white/10 bg-black/30 px-2 py-1.5"><span className="text-zinc-400">Turnaround</span><span className="text-zinc-200">{input.turnaround}</span></div>
+          </div>
+          <p className="mt-3 text-[11px] text-zinc-500">Pricing is finalized on the next step after quote generation.</p>
+        </aside>
       </div>
 
       {error ? <p className="mt-4 text-sm text-red-400">{error}</p> : null}
 
       <div className="mt-8 flex flex-wrap gap-3">
-        <button onClick={handleContinue} disabled={isLoading} className="rounded-xl bg-orange-500 px-5 py-3 text-sm font-semibold text-white hover:bg-orange-400 disabled:opacity-60">
+        <button onClick={handleContinue} disabled={isLoading} className="rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-5 py-3 text-sm font-semibold text-white hover:from-orange-400 hover:to-amber-400 disabled:opacity-60">
           {isLoading ? 'Generating Quote...' : 'Continue to Artwork'}
         </button>
         <Link to="/" className="rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-zinc-200 hover:bg-white/5">
