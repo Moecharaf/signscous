@@ -113,14 +113,15 @@ export default function BannersQuotePage() {
   const selectedType = BANNER_TYPES.find((sample) => sample.id === input.bannerType) || BANNER_TYPES[0];
 
   return (
-    <section className="mx-auto max-w-6xl px-6 py-16 text-zinc-100">
+    <section className="relative mx-auto max-w-6xl px-6 py-16 text-zinc-100">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_15%_20%,rgba(255,122,26,0.12),transparent_35%),radial-gradient(circle_at_85%_5%,rgba(255,183,74,0.1),transparent_28%)]" />
       <div className="overflow-hidden rounded-3xl border border-orange-500/20 bg-gradient-to-br from-zinc-950 via-zinc-950 to-orange-950/30 p-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/30 bg-orange-500/10 px-3 py-1 text-xs font-semibold text-orange-300">
               Banner Configurator
             </div>
-            <h1 className="mt-3 text-4xl font-black tracking-tight">Banners Quote</h1>
+            <h1 className="mt-3 bg-gradient-to-r from-white to-zinc-300 bg-clip-text text-4xl font-black tracking-tight text-transparent md:text-5xl">Banners Quote</h1>
             <p className="mt-2 max-w-2xl text-sm text-zinc-300">
               Build your order with 7 product families, custom dimensions, finishing controls, and production preferences.
             </p>
@@ -134,7 +135,7 @@ export default function BannersQuotePage() {
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_280px]">
-        <div className="rounded-3xl border border-white/10 bg-zinc-950 p-6">
+        <div className="rounded-3xl border border-white/10 bg-zinc-950/85 p-6 shadow-[0_14px_40px_rgba(0,0,0,0.42)] backdrop-blur-md">
           <div className="mb-5 text-sm font-semibold text-zinc-200">Banner product types</div>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {BANNER_TYPES.map((sample) => (
@@ -142,7 +143,7 @@ export default function BannersQuotePage() {
                 key={sample.id}
                 type="button"
                 onClick={() => applyBannerType(sample.id)}
-                className={`overflow-hidden rounded-2xl border text-left transition hover:-translate-y-0.5 ${input.bannerType === sample.id ? 'border-orange-500 ring-2 ring-orange-500/20' : 'border-white/10 hover:border-white/30'}`}
+                className={`overflow-hidden rounded-2xl border text-left transition hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(0,0,0,0.35)] ${input.bannerType === sample.id ? 'border-orange-500 ring-2 ring-orange-500/20' : 'border-white/10 hover:border-white/30'}`}
               >
                 <img src={sample.src} alt={sample.name} className="h-28 w-full object-cover" />
                 <div className="bg-black/60 px-3 py-2">
@@ -153,7 +154,7 @@ export default function BannersQuotePage() {
             ))}
           </div>
 
-          <div className="mt-5 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
+          <div className="mt-5 overflow-hidden rounded-2xl border border-white/10 bg-black/40 shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
             <img
               src={selectedType.src}
               alt="Selected banner preview"
@@ -167,7 +168,7 @@ export default function BannersQuotePage() {
 
           <div className="mt-5 grid gap-3 text-sm text-zinc-300 sm:grid-cols-2">
 
-          <div className="col-span-2 rounded-2xl border border-white/10 bg-black/40 px-4 py-3">
+          <div className="col-span-2 rounded-2xl border border-white/10 bg-black/30 px-4 py-3">
             <div className="mb-2 text-sm text-zinc-300">Size (feet)</div>
             <div className="mb-3 flex flex-wrap gap-2">
               {BANNER_PRESETS.map((p) => {
@@ -199,7 +200,7 @@ export default function BannersQuotePage() {
             </div>
           </div>
 
-          <label className="rounded-2xl border border-white/10 bg-black/40 px-4 py-3">Material
+          <label className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3">Material
             <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.material} onChange={set('material')}>
               <option value="vinyl_13oz">13oz Vinyl</option>
               <option value="vinyl_18oz">18oz Vinyl (Heavy)</option>
@@ -212,14 +213,14 @@ export default function BannersQuotePage() {
             </select>
           </label>
 
-          <label className="rounded-2xl border border-white/10 bg-black/40 px-4 py-3">Print Sides
+          <label className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3">Print Sides
             <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.sides} onChange={set('sides')}>
               <option value="single_sided">Single-sided</option>
               <option value="double_sided">Double-sided</option>
             </select>
           </label>
 
-          <label className="rounded-2xl border border-white/10 bg-black/40 px-4 py-3">Finishing
+          <label className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3">Finishing
             <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.finishing} onChange={set('finishing')}>
               <option value="hemmed_grommets">Hemmed + Grommets</option>
               <option value="pole_pocket">Pole Pocket</option>
@@ -227,18 +228,18 @@ export default function BannersQuotePage() {
             </select>
           </label>
 
-          <label className="rounded-2xl border border-white/10 bg-black/40 px-4 py-3">Quantity
+          <label className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3">Quantity
             <input type="number" min="1" className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.quantity} onChange={(e) => setInput({ ...input, quantity: Number(e.target.value) })} />
           </label>
 
-          <label className="rounded-2xl border border-white/10 bg-black/40 px-4 py-3">Turnaround
+          <label className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3">Turnaround
             <select className="mt-2 w-full rounded-lg bg-zinc-900 px-3 py-2" value={input.turnaround} onChange={set('turnaround')}>
               <option value="standard_48h">Standard 48h</option>
               <option value="rush_24h">Rush 24h</option>
             </select>
           </label>
 
-          <div className="col-span-2 rounded-2xl border border-white/10 bg-black/40 px-4 py-3">
+          <div className="col-span-2 rounded-2xl border border-white/10 bg-black/30 px-4 py-3">
             <div className="mb-3 text-sm font-semibold text-zinc-200">Advanced Options</div>
             <div className="grid gap-3 sm:grid-cols-2">
               <label>Hem Option
@@ -284,7 +285,7 @@ export default function BannersQuotePage() {
           </div>
         </div>
 
-        <aside className="h-fit rounded-3xl border border-white/10 bg-zinc-950 p-4 lg:sticky lg:top-6">
+        <aside className="h-fit rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-[0_12px_35px_rgba(0,0,0,0.45)] backdrop-blur-md lg:sticky lg:top-6">
           <div className="text-xs font-semibold uppercase tracking-wide text-zinc-400">Live Quote Snapshot</div>
           <div className="mt-3 rounded-2xl border border-orange-500/20 bg-orange-500/10 p-3">
             <div className="text-sm font-semibold text-orange-300">{selectedType.name}</div>

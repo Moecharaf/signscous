@@ -6,17 +6,74 @@
 
 :root {
   color-scheme: dark;
+  --bg-0: #04050a;
+  --bg-1: #0b0f19;
+  --ink-0: #f8fafc;
+  --ink-1: #dbe2ef;
+  --ink-2: #9aa4b5;
+  --accent: #ff7a1a;
+  --accent-2: #ffb74a;
 }
 
 body {
   margin: 0;
   min-width: 320px;
-  background: #050608;
+  color: var(--ink-0);
+  background:
+    radial-gradient(1200px 600px at 90% -10%, rgba(255, 122, 26, 0.16), transparent 60%),
+    radial-gradient(1000px 500px at -10% 110%, rgba(255, 183, 74, 0.1), transparent 60%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-0));
   font-family: 'Barlow', sans-serif;
+  letter-spacing: 0.01em;
 }
 
 .hero-reveal {
   animation: riseIn 700ms ease-out both;
+}
+
+/* Base controls: make forms look intentional and consistent across pages. */
+input,
+select,
+textarea {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+  color: var(--ink-0);
+  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: rgba(255, 122, 26, 0.65);
+  box-shadow: 0 0 0 3px rgba(255, 122, 26, 0.16);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+}
+
+button {
+  transition: transform 150ms ease, box-shadow 180ms ease, filter 180ms ease;
+}
+
+button:hover {
+  filter: saturate(1.06);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 122, 26, 0.7), rgba(255, 183, 74, 0.55));
 }
 
 @keyframes riseIn {
