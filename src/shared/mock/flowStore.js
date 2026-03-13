@@ -137,7 +137,7 @@ export function calculateMockCheckoutPrice(cartId, shippingMethod = 'ground') {
   };
 }
 
-export function placeMockOrder({ cartId, shippingMethod = 'ground', userId = null }) {
+export function placeMockOrder({ cartId, shippingMethod = 'ground', userId = null, paymentMethod = 'card' }) {
   const store = safeRead();
   const cart = store.carts[cartId];
   if (!cart) throw new Error('Cart not found.');
@@ -152,6 +152,7 @@ export function placeMockOrder({ cartId, shippingMethod = 'ground', userId = nul
     userId,
     status: 'paid',
     paymentStatus: 'captured',
+    paymentMethod,
     createdAt: new Date().toISOString(),
     items: cart.items,
     totals,

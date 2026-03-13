@@ -48,6 +48,9 @@ export default function OrderTrackingPage() {
       {summary?.status ? (
         <div className="mt-4 rounded-2xl border border-white/10 bg-zinc-950 p-5 text-sm text-zinc-300">
           Current status: <span className="font-semibold text-white">{summary.status}</span>
+          <div className="mt-2 text-xs text-zinc-400">
+            Payment method: <span className="font-semibold text-zinc-200">{String(summary.paymentMethod || 'card').replace('_', ' ')}</span>
+          </div>
         </div>
       ) : null}
 

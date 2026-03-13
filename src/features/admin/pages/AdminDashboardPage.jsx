@@ -131,6 +131,7 @@ export default function AdminDashboardPage() {
                       })()}
                     </div>
                     <div className="text-sm text-zinc-400">Status: {order.status}</div>
+                    <div className="text-xs text-zinc-500">Payment: {String(order.paymentMethod || 'card').replace('_', ' ')}</div>
                   </div>
                   <div className="text-right">
                     <div className="font-semibold">${Number(order.totals?.total || 0).toFixed(2)}</div>

@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS orders (
   cart_id        TEXT,
   status         TEXT        NOT NULL DEFAULT 'paid',
   payment_status TEXT        NOT NULL DEFAULT 'captured',
+  payment_method TEXT        NOT NULL DEFAULT 'card',
   shipping_method TEXT       NOT NULL,
   subtotal       NUMERIC(12,2) NOT NULL,
   shipping       NUMERIC(12,2) NOT NULL,
@@ -104,3 +105,4 @@ CREATE TABLE IF NOT EXISTS artworks (
 );
 
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS artwork_id TEXT;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment_method TEXT DEFAULT 'card';

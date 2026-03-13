@@ -409,7 +409,7 @@ export async function getCheckoutTotals(cartId, shippingMethod) {
 
 // ── Orders ────────────────────────────────────────────────────────────────────
 
-export async function placeOrder({ userId, cartId, shippingMethod, artworkId }) {
+export async function placeOrder({ userId, cartId, shippingMethod, artworkId, paymentMethod }) {
   const cart = await getCart(cartId);
   if (!cart) throw new Error('Cart not found.');
 
@@ -425,11 +425,11 @@ export async function placeOrder({ userId, cartId, shippingMethod, artworkId }) 
     await client.query(
       `INSERT INTO orders
          (id, order_number, user_id, cart_id, status, payment_status,
-          shipping_method, subtotal, shipping, tax, total, artwork_id)
-       VALUES ($1,$2,$3,$4,'paid','captured',$5,$6,$7,$8,$9,$10)`,
+         payment_method, shipping_method, subtotal, shipping, tax, total, artwork_id)
+       VALUES ($1,$2,$3,$4,'paid','captured',$5,$6,$7,$8,$9,$10,$11)`,
       [orderId, orderNumber, userId || null, cartId,
-       shippingMethod || 'ground', totals.subtotal, totals.shipping, totals.tax, totals.total,
-       artworkId || null]
+       paymentMethod || 'card', shippingMethod || 'ground', totals.subtotal, totals.shipping, totals.tax,
+       totals.total, artworkId || null]
     );
 
     for (const item of cart.items) {
@@ -479,6 +479,7 @@ export async function getOrder(orderNumber) {
     userId: o.user_id,
     status: o.status,
     paymentStatus: o.payment_status,
+    paymentMethod: o.payment_method || 'card',
     shippingMethod: o.shipping_method,
     totals: {
       subtotal: Number(o.subtotal),
@@ -516,6 +517,7 @@ export async function getOrdersByUser(userId) {
     orderNumber: o.order_number,
     userId: o.user_id,
     status: o.status,
+    paymentMethod: o.payment_method || 'card',
     totals: {
       subtotal: Number(o.subtotal),
       shipping: Number(o.shipping),
@@ -533,6 +535,7 @@ export async function getAllOrders() {
     orderNumber: o.order_number,
     userId: o.user_id,
     status: o.status,
+    paymentMethod: o.payment_method || 'card',
     artworkId: o.artwork_id || null,
     totals: {
       subtotal: Number(o.subtotal),

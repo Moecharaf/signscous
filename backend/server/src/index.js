@@ -347,12 +347,13 @@ app.post('/v1/checkout/price', async (req, res) => {
 
 app.post('/v1/orders', authRequired, async (req, res) => {
   try {
-    const { cartId, shippingMethod, artworkId } = req.body || {};
+    const { cartId, shippingMethod, artworkId, paymentMethod } = req.body || {};
     const result = await placeOrder({
       userId: req.user.id,
       cartId,
       shippingMethod: shippingMethod || 'ground',
       artworkId: artworkId || null,
+      paymentMethod: paymentMethod || 'card',
     });
     return res.status(201).json(result);
   } catch (err) {

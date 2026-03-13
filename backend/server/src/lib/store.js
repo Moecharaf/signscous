@@ -276,7 +276,7 @@ export function getCheckoutTotals(cartId, shippingMethod) {
   return { subtotal: cart.subtotal, shipping, tax, total };
 }
 
-export function placeOrder({ userId, cartId, shippingMethod }) {
+export function placeOrder({ userId, cartId, shippingMethod, paymentMethod }) {
   const cart = getCart(cartId);
   if (!cart) throw new Error('Cart not found.');
 
@@ -289,6 +289,7 @@ export function placeOrder({ userId, cartId, shippingMethod }) {
     userId,
     status: 'paid',
     paymentStatus: 'captured',
+    paymentMethod: paymentMethod || 'card',
     items: cart.items,
     totals,
     createdAt: new Date().toISOString(),
