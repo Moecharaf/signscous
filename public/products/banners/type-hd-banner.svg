@@ -1,12 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#1f2937"/>
-      <stop offset="1" stop-color="#0b1220"/>
+      <stop offset="0" stop-color="#0b1324"/>
+      <stop offset="1" stop-color="#1d3557"/>
+    </linearGradient>
+    <linearGradient id="ribbon" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f97316"/>
+      <stop offset="1" stop-color="#fbbf24"/>
     </linearGradient>
   </defs>
   <rect width="1200" height="600" fill="url(#bg)"/>
-  <rect x="0" y="420" width="1200" height="180" fill="#f59e0b" opacity="0.18"/>
-  <text x="80" y="220" fill="#f59e0b" font-size="66" font-family="Arial" font-weight="700">HD BANNER</text>
-  <text x="80" y="290" fill="#e5e7eb" font-size="42" font-family="Arial">Premium Vinyl Scrim Banner</text>
+  <circle cx="1080" cy="120" r="170" fill="#f97316" opacity="0.18"/>
+  <path d="M0 420 L1200 300 L1200 600 L0 600 Z" fill="#0a0f1f" opacity="0.65"/>
+  <rect x="0" y="470" width="1200" height="130" fill="url(#ribbon)" opacity="0.22"/>
+  <text x="72" y="210" fill="#fbbf24" font-size="78" font-family="Arial" font-weight="800">HD BANNER</text>
+  <text x="72" y="280" fill="#f8fafc" font-size="40" font-family="Arial">Premium Vinyl Scrim Banner</text>
+  <text x="72" y="348" fill="#cbd5e1" font-size="24" font-family="Arial">Outdoor durable. High color density. Trade-grade finish.</text>
 </svg>
